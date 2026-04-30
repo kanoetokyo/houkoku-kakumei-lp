@@ -161,6 +161,7 @@ img {
   font-size: clamp(18px, 2vw, 24px);
   font-weight: 800;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .lead-line span,
@@ -176,6 +177,7 @@ img {
   font-size: clamp(36px, 5vw, 56px);
   line-height: 1.45;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
 }
 
 .hero-text {
@@ -185,15 +187,18 @@ img {
   font-size: 18px;
   font-weight: 700;
   line-height: 2;
+  overflow-wrap: anywhere;
 }
 
 .price-line {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 8px;
   margin: 20px 0 28px;
   font-size: 24px;
   font-weight: 900;
+  line-height: 1.2;
 }
 
 .price-line span {
@@ -202,8 +207,8 @@ img {
 
 .price-line strong {
   color: var(--orange);
-  font-size: clamp(56px, 7vw, 76px);
-  line-height: 0.95;
+  font-size: clamp(52px, 6vw, 68px);
+  line-height: 1;
 }
 
 .hero-actions {
@@ -867,15 +872,17 @@ img {
   display: flex;
   align-items: baseline;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 12px;
   min-height: 120px;
   padding: 20px;
+  text-align: center;
 }
 
 .price-card strong {
   color: var(--orange);
-  font-size: clamp(58px, 7vw, 86px);
-  line-height: 0.92;
+  font-size: clamp(58px, 6.4vw, 78px);
+  line-height: 1;
 }
 
 .price-card span {
@@ -1093,6 +1100,14 @@ img {
   }
 }
 
+@media (max-width: 1200px) {
+  .price-line span:last-child {
+    flex-basis: 100%;
+    margin-top: 0;
+    margin-left: calc(2em + 8px);
+  }
+}
+
 @media (max-width: 720px) {
   .section-shell {
     width: min(100% - 28px, 1120px);
@@ -1127,12 +1142,20 @@ img {
   }
 
   .price-line {
-    gap: 6px;
+    display: grid;
+    grid-template-columns: max-content max-content;
+    gap: 0 6px;
+    align-items: end;
     font-size: 18px;
   }
 
   .price-line strong {
-    font-size: 50px;
+    font-size: 48px;
+  }
+
+  .price-line span:last-child {
+    grid-column: 1 / -1;
+    margin: 0;
   }
 
   .hero-actions,
@@ -1217,5 +1240,19 @@ img {
 
   .footer-links {
     margin-left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-cta {
+    flex: 0 0 44px;
+    width: 44px;
+    gap: 0;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .header-cta span {
+    font-size: 14px;
   }
 }

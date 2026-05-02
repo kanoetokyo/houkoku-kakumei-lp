@@ -25,7 +25,7 @@
         <a href="#price">料金</a>
         <a href="#faq">よくあるご質問</a>
       </nav>
-      <a class="header-cta" href="#demo">
+      <a class="header-cta" href="#demo-form">
         <span aria-hidden="true">▤</span>
         無料デモを申し込む
       </a>
@@ -40,19 +40,10 @@
             中小企業向けの始めやすい社内SNSで、日報・つぶやき・掲示板・評価を一元化。
             現場の声を、会社の力に変えます。
           </p>
-          <div class="price-line">
-            <span>月額</span>
-            <strong>5,500</strong>
-            <span>円から利用可能</span>
-          </div>
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo">
+            <a class="button button-primary" href="#demo-form">
               <span aria-hidden="true">▤</span>
               無料デモを申し込む
-            </a>
-            <a class="button button-secondary" href="#download">
-              <span aria-hidden="true">▣</span>
-              資料をダウンロード
             </a>
           </div>
           <ul class="proof-list" aria-label="安心ポイント">
@@ -270,13 +261,9 @@
           <p>まずは無料デモで体験してください。実際の画面を使って「報告 → 評価 → 見える化」の流れをご確認いただけます。</p>
         </div>
         <div class="demo-actions">
-          <a class="button button-primary" href="mailto:demo@example.com?subject=無料デモ申し込み">
+          <a class="button button-primary" href="#demo-form">
             <span aria-hidden="true">▤</span>
             無料デモを申し込む
-          </a>
-          <a class="button button-secondary" id="download" href="mailto:info@example.com?subject=資料ダウンロード希望">
-            <span aria-hidden="true">✉</span>
-            お問い合わせはこちら
           </a>
         </div>
       </section>
@@ -298,6 +285,48 @@
           </details>
         </div>
       </section>
+
+      <section class="demo-form-section" id="demo-form">
+        <div class="demo-form-copy">
+          <p class="section-eyebrow">無料デモのお申し込み</p>
+          <h2>実際の画面を見ながら、御社での使い方をご案内します。</h2>
+        </div>
+        <form
+          class="demo-form"
+          action="https://docs.google.com/forms/d/e/1FAIpQLSduvi0Z4rV3l6UjDHSUXcQYXYY8ejdm_ENMGYz5c4SUVSnWdQ/formResponse"
+          method="POST"
+          target="google-form-target"
+        >
+          <label>
+            <span>会社名</span>
+            <input type="text" name="entry.76457101" autocomplete="organization" required />
+          </label>
+          <label>
+            <span>担当者名</span>
+            <input type="text" name="entry.853312219" autocomplete="name" required />
+          </label>
+          <label>
+            <span>電話番号</span>
+            <input type="tel" name="entry.121044799" autocomplete="tel" required />
+          </label>
+          <label>
+            <span>メールアドレス</span>
+            <input type="email" name="entry.1490888909" autocomplete="email" required />
+          </label>
+          <label>
+            <span>従業員数</span>
+            <input type="number" name="entry.749671614" min="1" inputmode="numeric" />
+          </label>
+          <input type="hidden" name="fvv" value="1" />
+          <input type="hidden" name="pageHistory" value="0" />
+          <p class="form-status" aria-live="polite"></p>
+          <button class="button button-primary form-submit" type="submit">
+            <span aria-hidden="true">▤</span>
+            無料デモを申し込む
+          </button>
+        </form>
+        <iframe class="google-form-target" name="google-form-target" title="Google Form submission"></iframe>
+      </section>
     </main>
 
     <footer class="footer">
@@ -311,5 +340,62 @@
       </div>
       <p>© KANOE Inc.</p>
     </footer>
+    <script>
+      (() => {
+        const form = document.querySelector(".demo-form");
+        const frame = document.querySelector(".google-form-target");
+        const status = document.querySelector(".form-status");
+        const submitButton = document.querySelector(".form-submit");
+        let submitted = false;
+        const canUseBackend = location.protocol === "http:" || location.protocol === "https:";
+
+        if (!form || !frame || !status || !submitButton) return;
+
+        const setStatus = (message, state) => {
+          status.textContent = message;
+          status.classList.toggle("is-success", state === "success");
+          status.classList.toggle("is-error", state === "error");
+        };
+
+        form.addEventListener("submit", async (event) => {
+          submitted = true;
+          setStatus("送信中です。");
+          submitButton.disabled = true;
+
+          if (!canUseBackend) return;
+
+          event.preventDefault();
+
+          try {
+            const response = await fetch("/api/demo", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+              },
+              body: new URLSearchParams(new FormData(form)),
+            });
+
+            if (!response.ok) throw new Error("Submission failed");
+
+            setStatus("お申し込みありがとうございます。内容を確認のうえご連絡します。", "success");
+            form.reset();
+          } catch {
+            setStatus("送信に失敗しました。時間をおいてもう一度お試しください。", "error");
+          } finally {
+            submitButton.disabled = false;
+            submitted = false;
+          }
+        });
+
+        frame.addEventListener("load", () => {
+          if (!submitted || canUseBackend) return;
+
+          setStatus("お申し込みありがとうございます。内容を確認のうえご連絡します。", "success");
+          form.reset();
+          submitButton.disabled = false;
+          submitted = false;
+        });
+      })();
+    </script>
   </body>
 </html>

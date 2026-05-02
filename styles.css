@@ -20,6 +20,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -29,6 +30,7 @@ body {
     linear-gradient(180deg, rgba(255, 251, 246, 0.96), rgba(255, 255, 255, 0.98) 38%, #fff8ef 100%),
     var(--paper);
   letter-spacing: 0;
+  overflow-x: hidden;
 }
 
 a {
@@ -188,27 +190,6 @@ img {
   font-weight: 700;
   line-height: 2;
   overflow-wrap: anywhere;
-}
-
-.price-line {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 20px 0 28px;
-  font-size: 24px;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
-.price-line span {
-  white-space: nowrap;
-}
-
-.price-line strong {
-  color: var(--orange);
-  font-size: clamp(52px, 6vw, 68px);
-  line-height: 1;
 }
 
 .hero-actions {
@@ -506,7 +487,7 @@ img {
 
 .problem-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) 1.35fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
   align-items: stretch;
 }
@@ -545,23 +526,30 @@ img {
 
 .problem-note {
   display: grid;
-  grid-template-columns: 118px 1fr;
-  gap: 22px;
+  grid-column: 1 / -1;
+  grid-template-columns: 112px minmax(0, 680px);
+  gap: 24px;
   align-items: center;
-  margin-left: 36px;
+  justify-content: center;
+  margin: 24px 0 0;
+  padding: 26px 32px;
+  background: #fffaf5;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 14px 32px rgba(68, 52, 39, 0.06);
 }
 
 .problem-note strong {
   display: block;
-  font-size: 20px;
-  line-height: 1.8;
+  font-size: 22px;
+  line-height: 1.65;
 }
 
 .problem-note p {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: var(--muted);
   font-weight: 700;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 .solution {
@@ -985,6 +973,99 @@ img {
   line-height: 1.8;
 }
 
+.demo-form-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1fr);
+  gap: clamp(28px, 5vw, 56px);
+  align-items: start;
+  width: min(1120px, calc(100% - 48px));
+  margin: 0 auto 64px;
+  padding: 48px 0 10px;
+}
+
+.demo-form-copy {
+  padding-top: 8px;
+}
+
+.demo-form-copy .section-eyebrow {
+  margin-bottom: 8px;
+  color: var(--orange);
+}
+
+.demo-form-copy h2 {
+  margin: 0;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.55;
+}
+
+.demo-form {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(68, 52, 39, 0.08);
+}
+
+.demo-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.demo-form input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  color: var(--ink);
+  background: #fffdf9;
+  border: 1px solid #e6d8cb;
+  border-radius: 8px;
+  font: inherit;
+  outline: none;
+}
+
+.demo-form input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(241, 90, 25, 0.14);
+}
+
+.form-status {
+  min-height: 24px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.form-status.is-success {
+  color: var(--green);
+}
+
+.form-status.is-error {
+  color: var(--orange-dark);
+}
+
+.form-submit {
+  width: 100%;
+  margin-top: 4px;
+  border: 0;
+  cursor: pointer;
+}
+
+.form-submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.google-form-target {
+  display: none;
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -1050,6 +1131,7 @@ img {
   .problem-grid,
   .feature-grid,
   .before-after,
+  .demo-form-section,
   .demo {
     grid-template-columns: 1fr;
   }
@@ -1100,27 +1182,32 @@ img {
   }
 }
 
-@media (max-width: 1200px) {
-  .price-line span:last-child {
-    flex-basis: 100%;
-    margin-top: 0;
-    margin-left: calc(2em + 8px);
-  }
-}
-
 @media (max-width: 720px) {
   .section-shell {
-    width: min(100% - 28px, 1120px);
+    width: min(100% - 32px, 1120px);
   }
 
   .site-header {
     position: static;
+    align-items: center;
     gap: 14px;
     padding: 14px;
   }
 
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-kicker {
+    font-size: 10px;
+  }
+
   .brand-name {
-    font-size: 22px;
+    font-size: 21px;
+  }
+
+  .brand-romaji {
+    font-size: 8px;
   }
 
   .header-cta {
@@ -1130,32 +1217,25 @@ img {
   }
 
   .hero {
-    padding-top: 30px;
+    gap: 28px;
+    padding: 32px 0 44px;
+  }
+
+  .lead-line {
+    margin-bottom: 14px;
+    font-size: 17px;
+    line-height: 1.7;
   }
 
   .hero h1 {
-    font-size: 34px;
+    font-size: clamp(30px, 9vw, 36px);
+    line-height: 1.35;
   }
 
   .hero-text {
+    margin: 20px 0 22px;
     font-size: 16px;
-  }
-
-  .price-line {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    gap: 0 6px;
-    align-items: end;
-    font-size: 18px;
-  }
-
-  .price-line strong {
-    font-size: 48px;
-  }
-
-  .price-line span:last-child {
-    grid-column: 1 / -1;
-    margin: 0;
+    line-height: 1.9;
   }
 
   .hero-actions,
@@ -1163,44 +1243,86 @@ img {
     display: grid;
   }
 
+  .hero-actions {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .proof-list {
+    gap: 12px;
+  }
+
   .button {
     width: 100%;
   }
 
   .hero-visual {
-    min-height: 410px;
+    min-height: 320px;
     overflow: hidden;
   }
 
   .laptop {
-    width: 520px;
-    transform: scale(0.68);
-    transform-origin: top left;
+    left: 50%;
+    width: 500px;
+    transform: translateX(-50%) scale(0.62);
+    transform-origin: top center;
   }
 
   .phone {
-    right: 0;
-    transform: scale(0.76);
+    right: 4px;
+    bottom: 4px;
+    transform: scale(0.64);
     transform-origin: bottom right;
+  }
+
+  .problem {
+    padding: 34px 0 32px;
   }
 
   .problem h2,
   .solution h2,
   .faq h2 {
-    font-size: 24px;
+    font-size: 23px;
+    line-height: 1.55;
+  }
+
+  .mini-card {
+    min-height: 130px;
+    padding: 20px 16px;
   }
 
   .problem-note {
-    grid-template-columns: 90px 1fr;
+    grid-template-columns: 82px 1fr;
+    gap: 16px;
   }
 
   .problem-note strong {
     font-size: 16px;
   }
 
+  .solution {
+    padding: 34px 0 40px;
+  }
+
   .solution-row {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .solution-row div {
+    grid-template-columns: 54px 1fr;
+    gap: 14px;
+    min-height: 78px;
+    padding: 12px 4px;
+  }
+
+  .solution-row img {
+    width: 54px;
+    height: 54px;
+  }
+
+  .features {
+    padding: 8px 0 40px;
   }
 
   .feature-card,
@@ -1209,15 +1331,57 @@ img {
     padding: 22px;
   }
 
+  .feature-card h3 {
+    font-size: 22px;
+  }
+
+  .sample-post,
+  .read-list,
+  .ranking {
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .comparison {
+    min-height: 230px;
+    padding-bottom: 112px;
+  }
+
+  .comparison img {
+    width: 98px;
+  }
+
+  .recommended h2 {
+    font-size: 20px;
+  }
+
+  .price-band {
+    gap: 16px;
+    margin-bottom: 38px;
+    padding: 18px;
+  }
+
+  .price-bubble {
+    width: 160px;
+    min-height: 116px;
+    padding: 16px;
+  }
+
   .price-card {
     width: 100%;
     flex-wrap: wrap;
     gap: 8px;
     min-width: 0;
+    min-height: auto;
+    padding: 18px 14px;
   }
 
   .price-card strong {
-    font-size: 52px;
+    font-size: 48px;
+  }
+
+  .price-card span {
+    font-size: 18px;
   }
 
   .price-card span:last-child {
@@ -1226,19 +1390,47 @@ img {
   }
 
   .demo {
-    padding: 34px 14px;
+    gap: 22px;
+    padding: 34px 16px;
+  }
+
+  .demo h2 {
+    font-size: 25px;
+  }
+
+  .demo-actions {
+    gap: 12px;
+  }
+
+  .demo-form-section {
+    width: min(100% - 32px, 1120px);
+    gap: 20px;
+    margin-bottom: 44px;
+    padding-top: 34px;
+  }
+
+  .demo-form-copy h2 {
+    font-size: 25px;
+  }
+
+  .demo-form {
+    padding: 20px;
   }
 
   .footer {
     display: grid;
     gap: 16px;
+    padding: 24px 16px;
   }
 
   .footer-brand {
     display: grid;
+    gap: 8px;
   }
 
   .footer-links {
+    flex-wrap: wrap;
+    gap: 14px;
     margin-left: 0;
   }
 }
@@ -1254,5 +1446,30 @@ img {
 
   .header-cta span {
     font-size: 14px;
+  }
+
+  .hero h1 {
+    font-size: 31px;
+  }
+
+  .hero-visual {
+    min-height: 300px;
+  }
+
+  .laptop {
+    width: 480px;
+    transform: translateX(-50%) scale(0.59);
+  }
+
+  .phone {
+    transform: scale(0.6);
+  }
+
+  .problem-note {
+    grid-template-columns: 1fr;
+  }
+
+  .problem-note img {
+    width: 96px;
   }
 }

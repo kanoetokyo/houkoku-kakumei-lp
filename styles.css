@@ -894,7 +894,7 @@ img {
 
 .demo {
   display: grid;
-  grid-template-columns: 210px 1fr 350px;
+  grid-template-columns: 260px 1fr 350px;
   gap: 34px;
   align-items: center;
   width: 100%;
@@ -922,27 +922,9 @@ img {
   gap: 14px;
 }
 
-.mini-laptop {
-  width: 200px;
-  height: 128px;
-  background:
-    linear-gradient(#fff 0 0) 20px 18px / 160px 88px no-repeat,
-    linear-gradient(90deg, #f15a19 0 58px, #f4ded0 58px 100%) 34px 34px / 132px 8px no-repeat,
-    linear-gradient(90deg, #30343a 0 52px, #f4ded0 52px 100%) 34px 52px / 132px 6px no-repeat,
-    linear-gradient(90deg, #30343a 0 72px, #f4ded0 72px 100%) 34px 68px / 132px 6px no-repeat,
-    #202328;
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-}
-
-.mini-laptop::after {
-  display: block;
-  width: 230px;
-  height: 10px;
-  margin: 126px 0 0 -15px;
-  content: "";
-  background: #5b5e64;
-  border-radius: 0 0 10px 10px;
+.demo-voices-visual {
+  width: min(260px, 100%);
+  filter: drop-shadow(0 18px 28px rgba(49, 39, 29, 0.12));
 }
 
 .faq {

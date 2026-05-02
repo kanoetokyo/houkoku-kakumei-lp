@@ -1,0 +1,18 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#fff8ef"/>
+  <rect x="56" y="54" width="1088" height="522" rx="28" fill="#fffdf9" stroke="#e8ddd2" stroke-width="3"/>
+  <circle cx="1040" cy="150" r="62" fill="#f15a19" opacity="0.12"/>
+  <circle cx="149" cy="492" r="78" fill="#4b8b78" opacity="0.12"/>
+  <text x="104" y="148" fill="#111318" font-family="Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif" font-size="36" font-weight="800" letter-spacing="8">報告革命</text>
+  <text x="104" y="265" fill="#111318" font-family="Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif" font-size="68" font-weight="900">現場の声が集まる</text>
+  <text x="104" y="358" fill="#f15a19" font-family="Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif" font-size="68" font-weight="900">中小企業向け社内SNS</text>
+  <text x="106" y="445" fill="#62666f" font-family="Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif" font-size="30" font-weight="700">日報・つぶやき・掲示板・評価をひとつに。</text>
+  <text x="106" y="494" fill="#62666f" font-family="Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif" font-size="30" font-weight="700">従業員の声を会社の力に変えます。</text>
+  <rect x="850" y="220" width="210" height="250" rx="20" fill="#eef3f5" stroke="#111318" stroke-width="8"/>
+  <rect x="882" y="260" width="146" height="38" rx="10" fill="#fffdf9" stroke="#111318" stroke-width="6"/>
+  <rect x="882" y="326" width="146" height="38" rx="10" fill="#fffdf9" stroke="#111318" stroke-width="6"/>
+  <rect x="882" y="392" width="146" height="38" rx="10" fill="#fffdf9" stroke="#111318" stroke-width="6"/>
+  <circle cx="894" cy="279" r="7" fill="#f15a19"/>
+  <circle cx="894" cy="345" r="7" fill="#4b8b78"/>
+  <circle cx="894" cy="411" r="7" fill="#f15a19"/>
+</svg>

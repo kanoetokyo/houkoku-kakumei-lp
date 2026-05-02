@@ -5,9 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="報告革命は、日報・つぶやき・掲示板・評価をひとつにまとめ、現場の改善の声を集める社内SNSです。"
+      content="報告革命は、中小企業の現場の声を拾い、日報・つぶやき・掲示板・評価を一元化する社内SNSです。改善提案が自然に集まる仕組みづくりを無料デモで体験できます。"
     />
-    <title>報告革命 | 報告が集まる社内SNS</title>
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#fff8ef" />
+    <link rel="canonical" href="https://houkoku-kakumei-lp.vercel.app/" />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="報告革命" />
+    <meta property="og:title" content="報告革命 | 現場の声が集まる中小企業向け社内SNS" />
+    <meta
+      property="og:description"
+      content="消えていく従業員の声を拾い、現場の声を会社の力に変える社内SNS。日報・つぶやき・掲示板・評価をひとつに。"
+    />
+    <meta property="og:url" content="https://houkoku-kakumei-lp.vercel.app/" />
+    <meta property="og:image" content="https://houkoku-kakumei-lp.vercel.app/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="報告革命 現場の声が集まる中小企業向け社内SNS" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="報告革命 | 現場の声が集まる中小企業向け社内SNS" />
+    <meta
+      name="twitter:description"
+      content="日報・つぶやき・掲示板・評価を一元化し、従業員の声を会社の力に変える社内SNSです。"
+    />
+    <meta name="twitter:image" content="https://houkoku-kakumei-lp.vercel.app/assets/og-image.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://houkoku-kakumei-lp.vercel.app/#organization",
+            "name": "KANOE Inc.",
+            "url": "https://houkoku-kakumei-lp.vercel.app/"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://houkoku-kakumei-lp.vercel.app/#website",
+            "name": "報告革命",
+            "url": "https://houkoku-kakumei-lp.vercel.app/",
+            "inLanguage": "ja",
+            "publisher": {
+              "@id": "https://houkoku-kakumei-lp.vercel.app/#organization"
+            }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://houkoku-kakumei-lp.vercel.app/#software",
+            "name": "報告革命",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "url": "https://houkoku-kakumei-lp.vercel.app/",
+            "description": "報告革命は、中小企業の現場の声を拾い、日報・つぶやき・掲示板・評価を一元化する社内SNSです。",
+            "featureList": ["日報・つぶやき", "掲示板", "評価・メダル", "ランキング", "現場の声の可視化"],
+            "audience": {
+              "@type": "BusinessAudience",
+              "audienceType": "中小企業"
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": "https://houkoku-kakumei-lp.vercel.app/#price",
+              "price": "5500",
+              "priceCurrency": "JPY",
+              "availability": "https://schema.org/InStock"
+            },
+            "publisher": {
+              "@id": "https://houkoku-kakumei-lp.vercel.app/#organization"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://houkoku-kakumei-lp.vercel.app/#faq-schema",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "スマートフォンだけでも利用できますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "はい。日報・つぶやき・掲示板の確認までスマートフォンで利用できます。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "アルバイトやパートも使えますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "使えます。短い投稿でも参加できる設計なので、現場の小さな気づきを拾いやすくなります。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "導入前に実際の画面を確認できますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "無料デモで実際の画面をご覧いただけます。運用イメージに合わせてご説明します。"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+    <title>報告革命 | 中小企業向け社内SNS・日報アプリ</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -254,7 +356,11 @@
 
       <section class="demo section-shell" id="demo">
         <div class="demo-device">
-          <div class="mini-laptop"></div>
+          <img
+            class="demo-voices-visual"
+            src="./assets/demo-voices.svg"
+            alt="多くの従業員から改善提案の声が集まってくるイメージ"
+          />
         </div>
         <div class="demo-copy">
           <h2>劇的な<span>報告量の違い</span>を体感ください！</h2>

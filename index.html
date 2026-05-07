@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="報告革命は、中小企業の現場の声を拾い、日報・つぶやき・掲示板・評価を一元化する社内SNSです。改善提案が自然に集まる仕組みづくりを無料デモで体験できます。"
+      content="報告革命は、中小企業の現場の声を見える化し、日報アプリ・社内SNS・改善提案ツールをひとつにするサービスです。従業員の声を会社の改善に変える流れを30分の無料デモで確認できます。"
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#fff8ef" />
@@ -15,23 +15,25 @@
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="報告革命" />
-    <meta property="og:title" content="報告革命 | 現場の声が集まる中小企業向け社内SNS" />
+    <meta property="og:title" content="報告革命 | 改善提案が集まる中小企業向け社内SNS" />
     <meta
       property="og:description"
-      content="消えていく従業員の声を拾い、現場の声を会社の力に変える社内SNS。日報・つぶやき・掲示板・評価をひとつに。"
+      content="日報・つぶやき・掲示板・メダル評価で従業員の声を可視化。現場の声を会社の改善に変える社内SNSです。"
     />
     <meta property="og:url" content="https://houkoku-kakumei-lp.vercel.app/" />
     <meta property="og:image" content="https://houkoku-kakumei-lp.vercel.app/assets/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="報告革命 現場の声が集まる中小企業向け社内SNS" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="報告革命 | 現場の声が集まる中小企業向け社内SNS" />
+    <meta name="twitter:title" content="報告革命 | 改善提案が集まる中小企業向け社内SNS" />
     <meta
       name="twitter:description"
-      content="日報・つぶやき・掲示板・評価を一元化し、従業員の声を会社の力に変える社内SNSです。"
+      content="日報アプリ・社内SNS・改善提案ツールをひとつに。従業員の声を可視化し、改善が集まる状態を作ります。"
     />
     <meta name="twitter:image" content="https://houkoku-kakumei-lp.vercel.app/assets/og-image.png" />
+    <meta name="twitter:image:alt" content="報告革命 現場の声が集まる中小企業向け社内SNS" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -40,7 +42,13 @@
             "@type": "Organization",
             "@id": "https://houkoku-kakumei-lp.vercel.app/#organization",
             "name": "KANOE Inc.",
-            "url": "https://houkoku-kakumei-lp.vercel.app/"
+            "url": "https://houkoku-kakumei-lp.vercel.app/",
+            "logo": "https://houkoku-kakumei-lp.vercel.app/assets/favicon.svg",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "sales",
+              "availableLanguage": "ja"
+            }
           },
           {
             "@type": "WebSite",
@@ -53,63 +61,54 @@
             }
           },
           {
+            "@type": "WebPage",
+            "@id": "https://houkoku-kakumei-lp.vercel.app/#webpage",
+            "name": "報告革命 | 改善提案が集まる中小企業向け社内SNS",
+            "url": "https://houkoku-kakumei-lp.vercel.app/",
+            "inLanguage": "ja",
+            "isPartOf": {
+              "@id": "https://houkoku-kakumei-lp.vercel.app/#website"
+            },
+            "about": {
+              "@id": "https://houkoku-kakumei-lp.vercel.app/#software"
+            },
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://houkoku-kakumei-lp.vercel.app/assets/og-image.png",
+              "width": 1200,
+              "height": 630
+            }
+          },
+          {
             "@type": "SoftwareApplication",
             "@id": "https://houkoku-kakumei-lp.vercel.app/#software",
             "name": "報告革命",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "url": "https://houkoku-kakumei-lp.vercel.app/",
-            "description": "報告革命は、中小企業の現場の声を拾い、日報・つぶやき・掲示板・評価を一元化する社内SNSです。",
-            "featureList": ["日報・つぶやき", "掲示板", "評価・メダル", "ランキング", "現場の声の可視化"],
+            "image": "https://houkoku-kakumei-lp.vercel.app/assets/og-image.png",
+            "description": "報告革命は、中小企業の現場の声を拾い、日報アプリ・社内SNS・改善提案ツールを一元化するサービスです。",
+            "featureList": ["日報・つぶやき", "掲示板", "評価・メダル", "ランキング", "従業員の声の可視化", "改善提案の共有"],
             "audience": {
               "@type": "BusinessAudience",
               "audienceType": "中小企業"
             },
             "offers": {
-              "@type": "Offer",
+              "@type": "AggregateOffer",
               "url": "https://houkoku-kakumei-lp.vercel.app/#price",
-              "price": "5500",
+              "lowPrice": "5500",
               "priceCurrency": "JPY",
+              "offerCount": "1",
               "availability": "https://schema.org/InStock"
             },
             "publisher": {
               "@id": "https://houkoku-kakumei-lp.vercel.app/#organization"
             }
-          },
-          {
-            "@type": "FAQPage",
-            "@id": "https://houkoku-kakumei-lp.vercel.app/#faq-schema",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "スマートフォンだけでも利用できますか？",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "はい。日報・つぶやき・掲示板の確認までスマートフォンで利用できます。"
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "アルバイトやパートも使えますか？",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "使えます。短い投稿でも参加できる設計なので、現場の小さな気づきを拾いやすくなります。"
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "導入前に実際の画面を確認できますか？",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "無料デモで実際の画面をご覧いただけます。運用イメージに合わせてご説明します。"
-                }
-              }
-            ]
           }
         ]
       }
     </script>
-    <title>報告革命 | 中小企業向け社内SNS・日報アプリ</title>
+    <title>報告革命 | 改善提案が集まる中小企業向け社内SNS</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -123,34 +122,34 @@
         <a href="#features">特徴</a>
         <a href="#functions">機能</a>
         <a href="#impact">導入の効果</a>
-        <a href="#cases">導入事例</a>
+        <a href="#cases">活用シーン</a>
         <a href="#price">料金</a>
         <a href="#faq">よくあるご質問</a>
       </nav>
       <a class="header-cta" href="#demo-form">
         <span aria-hidden="true">▤</span>
-        無料デモを申し込む
+        無料デモ
       </a>
     </header>
 
     <main id="top">
       <section class="hero section-shell">
         <div class="hero-copy">
-          <h1>社内から<span>“改善の声”</span>が集まってくる、社内SNS</h1>
+          <h1>報告革命｜<span class="nowrap">現場の“<span class="accent">改善の声</span>”が</span><br /><span class="nowrap">毎日集まる社内SNS</span></h1>
           <p class="hero-text">
-            こんなこと社長や社員さんに言うことでもないから。
-            そうやって消えていく大切な従業員の声を拾う仕組みが報告革命です。
-            現場の声を会社の力に変えます。
+            中小企業の現場で、「言うほどじゃない」「どうせ伝わらない」。
+            そうして消えていた現場の気づきを、日報・つぶやき・メダル評価で拾い上げ、会社の改善に変えます。
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#demo-form">
               <span aria-hidden="true">▤</span>
-              無料デモを申し込む
+              30分の無料デモで画面を見る
             </a>
           </div>
           <ul class="proof-list" aria-label="安心ポイント">
-            <li>30分の無料デモで実機を体験</li>
-            <li>しつこい営業は一切しません</li>
+            <li>投稿・評価・掲示板の流れを確認</li>
+            <li>費用感と導入ステップをご案内</li>
+            <li>しつこい営業なし</li>
           </ul>
         </div>
 
@@ -160,15 +159,15 @@
             <div class="app-frame">
               <aside class="app-sidebar">
                 <div class="app-logo">報告革命</div>
-                <a class="active" href="#"><span>⌂</span>ホーム</a>
-                <a href="#"><span>□</span>日報・つぶやき</a>
-                <a href="#"><span>▥</span>掲示板</a>
-                <a href="#"><span>♕</span>ランキング</a>
-                <a href="#"><span>◇</span>メダル</a>
-                <a href="#"><span>⚙</span>設定</a>
+                <div class="app-nav-item active"><span>⌂</span>ホーム</div>
+                <div class="app-nav-item"><span>□</span>日報・つぶやき</div>
+                <div class="app-nav-item"><span>▥</span>掲示板</div>
+                <div class="app-nav-item"><span>♕</span>ランキング</div>
+                <div class="app-nav-item"><span>◇</span>メダル</div>
+                <div class="app-nav-item"><span>⚙</span>設定</div>
               </aside>
               <div class="app-main">
-                <h2>日報・つぶやき</h2>
+                <p class="app-title">日報・つぶやき</p>
                 <article class="post-card">
                   <div class="avatar"></div>
                   <div>
@@ -216,26 +215,27 @@
       </section>
 
       <section class="problem section-shell" id="impact">
-        <h2>社長の目と耳は、従業員<span>7名</span>で限界を迎えます。</h2>
+        <h2>従業員が増えるほど、社長が拾える声には限界がきます。</h2>
+        <p class="section-lead">小さな不満、改善の芽、離職のサイン。見えないままにしておくほど、現場の改善スピードは落ちていきます。</p>
         <div class="problem-grid">
           <div class="mini-card">
-            <img src="./assets/icon-chat.svg" alt="" />
+            <img src="./assets/icon-chat.svg" alt="" width="80" height="80" loading="lazy" decoding="async" />
             <p>現場の声が<br />上がってこない</p>
           </div>
           <div class="mini-card">
-            <img src="./assets/icon-store.svg" alt="" />
+            <img src="./assets/icon-store.svg" alt="" width="80" height="80" loading="lazy" decoding="async" />
             <p>改善提案が<br />減っている</p>
           </div>
           <div class="mini-card">
-            <img src="./assets/icon-team.svg" alt="" />
+            <img src="./assets/icon-team.svg" alt="" width="80" height="80" loading="lazy" decoding="async" />
             <p>店舗ごとに<br />バラバラ</p>
           </div>
           <div class="mini-card">
-            <img src="./assets/icon-muted.svg" alt="" />
+            <img src="./assets/icon-muted.svg" alt="" width="80" height="80" loading="lazy" decoding="async" />
             <p>「言ってもムダ」<br />という空気</p>
           </div>
           <div class="problem-note">
-            <img src="./assets/manager.svg" alt="" />
+            <img src="./assets/manager.svg" alt="" width="140" height="160" loading="lazy" decoding="async" />
             <div>
               <strong>気づかないうちに、改善は止まり、人は静かに離れていきます。</strong>
               <p>現場の温度を見える化し、声が届く会社へ変えていく必要があります。</p>
@@ -245,13 +245,13 @@
       </section>
 
       <section class="solution section-shell">
-        <p class="section-eyebrow">その課題、<span>“仕組み”</span>で解決できます。</p>
+        <p class="section-eyebrow">その課題、<span>“仕組み”</span>で解決します。</p>
         <h2>報告革命は、「報告が集まる状態」を作る社内SNSです。</h2>
         <div class="solution-row">
-          <div><img src="./assets/icon-write.svg" alt="" /><span>誰でも気軽に投稿できる</span></div>
-          <div><img src="./assets/icon-medal.svg" alt="" /><span>評価される仕組みがある</span></div>
-          <div><img src="./assets/icon-share.svg" alt="" /><span>会社に情報が届く</span></div>
-          <div><img src="./assets/icon-chart.svg" alt="" /><span>行動が見える化される</span></div>
+          <div><img src="./assets/icon-write.svg" alt="" width="80" height="80" loading="lazy" decoding="async" /><span>誰でも気軽に投稿できる</span></div>
+          <div><img src="./assets/icon-medal.svg" alt="" width="80" height="80" loading="lazy" decoding="async" /><span>評価される仕組みがある</span></div>
+          <div><img src="./assets/icon-share.svg" alt="" width="80" height="80" loading="lazy" decoding="async" /><span>会社に情報が届く</span></div>
+          <div><img src="./assets/icon-chart.svg" alt="" width="80" height="80" loading="lazy" decoding="async" /><span>行動が見える化される</span></div>
         </div>
       </section>
 
@@ -259,8 +259,8 @@
         <div class="feature-grid">
           <article class="feature-card">
             <p class="badge">FEATURE 01</p>
-            <h3>日々の頑張りが見える、そして評価される</h3>
-            <p>日報・つぶやきで、誰でも簡単に投稿。アルバイト・パートの声も自然に集まる。</p>
+            <h3>1分で現場の気づきを残せる</h3>
+            <p>日報・つぶやきで、社員・アルバイト・パートの小さな改善提案を自然に集めます。</p>
             <div class="sample-post">
               <div class="avatar"></div>
               <div>
@@ -271,15 +271,15 @@
               </div>
             </div>
             <ul>
-              <li>良い投稿には「メダル」を付与</li>
-              <li>評価が見える化され、改善が加速</li>
+              <li>投稿ハードルを下げて、声の量を増やす</li>
+              <li>改善提案を会社の資産として残せる</li>
             </ul>
           </article>
 
           <article class="feature-card">
             <p class="badge">FEATURE 02</p>
-            <h3>「読んだはず」を、「読んだ」に変える</h3>
-            <p>掲示板機能で全社共有を一本化。誰がいつ見たかを可視化できます。</p>
+            <h3>確認漏れと伝達のやり直しを減らす</h3>
+            <p>掲示板機能で全社共有を一本化。誰がいつ見たかを可視化し、社内コミュニケーションを整えます。</p>
             <div class="read-list">
               <div><span>5月シフト提出のお願い</span><strong>100%</strong></div>
               <div><span>就業規則 改訂のご案内</span><strong>87%</strong></div>
@@ -287,15 +287,15 @@
               <div><span>新マニュアル v2.3 配布</span><strong>61%</strong></div>
             </div>
             <ul>
-              <li>確認漏れなし</li>
-              <li>ワンクリックでリマインド</li>
+              <li>重要なお知らせの未読を把握</li>
+              <li>必要な人へワンクリックでリマインド</li>
             </ul>
           </article>
 
           <article class="feature-card">
             <p class="badge">FEATURE 03</p>
-            <h3>見えなかった貢献が、見えるようになる</h3>
-            <p>投稿数・コメント・改善提案を分析。独自の「ギバー指数」で評価します。</p>
+            <h3>目立たない貢献を評価に反映できる</h3>
+            <p>投稿数・コメント・改善提案を分析。独自の「ギバー指数」で従業員の声と貢献を可視化します。</p>
             <div class="ranking">
               <div class="rank-top"><span>♛ あなた</span><strong>308 pt</strong></div>
               <ol>
@@ -313,45 +313,58 @@
       </section>
 
       <section class="before-after section-shell" id="functions">
+        <div class="before-after-heading">
+          <p class="section-eyebrow">導入前後の変化</p>
+          <h2>声が届かない状態から、改善が回る状態へ。</h2>
+        </div>
         <div class="comparison before">
-          <h2>BEFORE</h2>
+          <p class="comparison-label">BEFORE</p>
           <ul>
             <li>報告は管理職だけ</li>
             <li>現場の温度感が分からない</li>
             <li>改善が進まない</li>
           </ul>
-          <img src="./assets/manager-worried.svg" alt="" />
+          <img src="./assets/manager-worried.svg" alt="" width="140" height="150" loading="lazy" decoding="async" />
         </div>
         <div class="arrow" aria-hidden="true">▶</div>
         <div class="comparison after">
-          <h2>AFTER</h2>
+          <p class="comparison-label">AFTER</p>
           <ul>
             <li>毎日、現場から声が上がる</li>
             <li>経営判断の精度が上がる</li>
             <li>改善が自然に回り出す</li>
           </ul>
-          <img src="./assets/manager-good.svg" alt="" />
+          <img src="./assets/manager-good.svg" alt="" width="140" height="150" loading="lazy" decoding="async" />
         </div>
         <div class="recommended" id="cases">
-          <h2>こんな会社におすすめです</h2>
+          <h2>活用シーン</h2>
           <ul>
-            <li>店舗・事業が増えてきた</li>
-            <li>現場の声が上がってこない</li>
-            <li>社員任せだと改善が進まない</li>
-            <li>コミュニケーションが弱い</li>
+            <li>店舗や拠点が増え、店長経由の報告だけでは現場が見えにくい会社</li>
+            <li>パート・アルバイトの改善提案を拾いたい会社</li>
+            <li>LINE連絡や口頭共有が流れ、確認漏れが起きている会社</li>
+            <li>社内コミュニケーションツールを現場改善に活かしたい会社</li>
           </ul>
         </div>
       </section>
 
       <section class="price-band section-shell" id="price">
-        <div class="price-bubble">気合いやガンバリズムを<br />仕組みで越える</div>
+        <div class="price-copy">
+          <p class="section-eyebrow">料金</p>
+          <h2>月額5,500円から、現場の声を拾う仕組みを始められます。</h2>
+          <p>人数・運用内容に合わせて、必要な機能と費用感を無料デモでご案内します。</p>
+        </div>
         <div class="price-card">
           <span>月額</span>
           <strong>5,500</strong>
           <span>円から利用可能</span>
         </div>
-        <p>企業規模・利用人数に応じて最適なプランをご提案します。</p>
-        <img src="./assets/team-line.svg" alt="" />
+        <div class="price-actions">
+          <a class="button button-primary" href="#demo-form">
+            <span aria-hidden="true">▤</span>
+            無料デモで費用感を確認する
+          </a>
+          <span>投稿・評価・掲示板の流れまで30分で確認できます。</span>
+        </div>
       </section>
 
       <section class="demo section-shell" id="demo">
@@ -360,48 +373,35 @@
             class="demo-voices-visual"
             src="./assets/demo-voices.svg"
             alt="多くの従業員から改善提案の声が集まってくるイメージ"
+            width="300"
+            height="220"
+            loading="lazy"
+            decoding="async"
           />
         </div>
         <div class="demo-copy">
           <h2>劇的な<span>報告量の違い</span>を体感ください！</h2>
-          <p>まずは無料デモで体験してください。実際の画面を使って「報告 → 評価 → 見える化」の流れをご確認いただけます。</p>
+          <p>実際の画面を使って「投稿 → 評価 → 掲示板 → 見える化」の流れをご確認いただけます。御社の現場に合わせた使い方までご案内します。</p>
         </div>
         <div class="demo-actions">
           <a class="button button-primary" href="#demo-form">
             <span aria-hidden="true">▤</span>
-            無料デモを申し込む
+            30分の無料デモで画面を見る
           </a>
-        </div>
-      </section>
-
-      <section class="faq section-shell" id="faq">
-        <h2>よくあるご質問</h2>
-        <div class="faq-list">
-          <details>
-            <summary>スマートフォンだけでも利用できますか？</summary>
-            <p>はい。日報・つぶやき・掲示板の確認までスマートフォンで利用できます。</p>
-          </details>
-          <details>
-            <summary>アルバイトやパートも使えますか？</summary>
-            <p>使えます。短い投稿でも参加できる設計なので、現場の小さな気づきを拾いやすくなります。</p>
-          </details>
-          <details>
-            <summary>導入前に実際の画面を確認できますか？</summary>
-            <p>無料デモで実際の画面をご覧いただけます。運用イメージに合わせてご説明します。</p>
-          </details>
         </div>
       </section>
 
       <section class="demo-form-section" id="demo-form">
         <div class="demo-form-copy">
           <p class="section-eyebrow">無料デモのお申し込み</p>
-          <h2>実際の画面を見ながら、御社での使い方をご案内します。</h2>
+          <h2>30分で、御社に合う使い方・必要機能・費用感をご案内します。</h2>
+          <p>画面を見ながら確認できるため、導入後の運用イメージまで具体的に判断できます。</p>
         </div>
         <form
           class="demo-form"
-          action="https://docs.google.com/forms/d/e/1FAIpQLSduvi0Z4rV3l6UjDHSUXcQYXYY8ejdm_ENMGYz5c4SUVSnWdQ/formResponse"
+          action="/api/demo"
+          data-google-action="https://docs.google.com/forms/d/e/1FAIpQLSduvi0Z4rV3l6UjDHSUXcQYXYY8ejdm_ENMGYz5c4SUVSnWdQ/formResponse"
           method="POST"
-          target="google-form-target"
         >
           <label>
             <span>会社名</span>
@@ -425,6 +425,7 @@
           </label>
           <input type="hidden" name="fvv" value="1" />
           <input type="hidden" name="pageHistory" value="0" />
+          <p class="form-note" id="privacy-note">入力内容は無料デモの日程調整とご案内にのみ使用します。しつこい営業は行いません。</p>
           <p class="form-status" aria-live="polite"></p>
           <button class="button button-primary form-submit" type="submit">
             <span aria-hidden="true">▤</span>
@@ -432,6 +433,24 @@
           </button>
         </form>
         <iframe class="google-form-target" name="google-form-target" title="Google Form submission"></iframe>
+      </section>
+
+      <section class="faq section-shell" id="faq">
+        <h2>よくあるご質問</h2>
+        <div class="faq-list">
+          <details>
+            <summary>スマートフォンだけでも利用できますか？</summary>
+            <p>はい。日報・つぶやき・掲示板の確認までスマートフォンで利用できます。</p>
+          </details>
+          <details>
+            <summary>アルバイトやパートも使えますか？</summary>
+            <p>使えます。短い投稿でも参加できる設計なので、現場の小さな気づきを拾いやすくなります。</p>
+          </details>
+          <details>
+            <summary>導入前に実際の画面を確認できますか？</summary>
+            <p>無料デモで実際の画面をご覧いただけます。費用感と運用イメージに合わせてご説明します。</p>
+          </details>
+        </div>
       </section>
     </main>
 
@@ -441,11 +460,12 @@
         <span class="brand-kicker">報告が集まる社内SNS</span>
       </div>
       <div class="footer-links">
-        <a href="#">プライバシーポリシー</a>
-        <a href="#">利用規約</a>
+        <a href="#privacy-note">個人情報の取り扱い</a>
+        <a href="#demo-form">無料デモ</a>
       </div>
       <p>© KANOE Inc.</p>
     </footer>
+    <a class="mobile-sticky-cta" href="#demo-form">無料デモ</a>
     <script>
       (() => {
         const form = document.querySelector(".demo-form");
@@ -454,6 +474,8 @@
         const submitButton = document.querySelector(".form-submit");
         let submitted = false;
         const canUseBackend = location.protocol === "http:" || location.protocol === "https:";
+        const backendAction = form?.getAttribute("action") || "/api/demo";
+        const googleAction = form?.dataset.googleAction;
 
         if (!form || !frame || !status || !submitButton) return;
 
@@ -468,12 +490,21 @@
           setStatus("送信中です。");
           submitButton.disabled = true;
 
-          if (!canUseBackend) return;
+          if (!canUseBackend) {
+            if (googleAction) {
+              form.action = googleAction;
+              form.target = "google-form-target";
+            }
+            return;
+          }
 
           event.preventDefault();
 
           try {
-            const response = await fetch("/api/demo", {
+            form.action = backendAction;
+            form.removeAttribute("target");
+
+            const response = await fetch(backendAction, {
               method: "POST",
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",

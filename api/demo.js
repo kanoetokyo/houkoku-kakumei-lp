@@ -28,12 +28,14 @@ async function readBody(req) {
 function sendJson(res, statusCode, payload) {
   res.statusCode = statusCode;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
   res.end(JSON.stringify(payload));
 }
 
 module.exports = async function handler(req, res) {
   if (req.method === "OPTIONS") {
     res.statusCode = 204;
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
     res.end();
     return;
   }

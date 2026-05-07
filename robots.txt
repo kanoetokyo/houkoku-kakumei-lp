@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://houkoku-kakumei-lp.vercel.app/sitemap.xml
+Sitemap: https://hokokukakumei.com/sitemap.xml

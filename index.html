@@ -328,45 +328,75 @@
               実体験をもとにした導入イメージです。登場人物・会話は架空です。
             </p>
           </div>
-          <div class="manga-pages">
-            <figure class="manga-page" data-reveal>
-              <a
-                class="manga-image-link"
-                href="./assets/manga-01.webp"
-                target="_blank"
-                rel="noopener"
-                aria-label="漫画の1ページ目を拡大して読む（新しいタブで開きます）"
+          <div
+            class="manga-carousel"
+            data-manga-carousel
+            aria-roledescription="carousel"
+            aria-label="報告革命の導入イメージ漫画"
+          >
+            <div class="manga-carousel-heading">
+              <p class="manga-slide-count" aria-live="polite">
+                <span data-manga-current>1</span><span aria-hidden="true"> / </span>4
+              </p>
+              <p class="manga-slide-title" data-manga-title>
+                現場は回る、でも声が埋もれる
+              </p>
+            </div>
+            <div class="manga-slides">
+              <figure
+                class="manga-slide is-active"
+                data-manga-slide
+                data-manga-title="現場は回る、でも声が埋もれる"
               >
-                <img
-                  src="./assets/manga-01.webp"
-                  alt="現場は回る、でも声が埋もれる。2台に分かれた清掃現場の小さな気づきを、報告革命に投稿するまでの4コマ。"
-                  width="864"
-                  height="1821"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span class="manga-zoom">1ページ目を拡大して読む<span aria-hidden="true">↗</span></span>
-              </a>
-            </figure>
-            <figure class="manga-page" data-reveal>
-              <a
-                class="manga-image-link"
-                href="./assets/manga-02.webp"
-                target="_blank"
-                rel="noopener"
-                aria-label="漫画の2ページ目を拡大して読む（新しいタブで開きます）"
+                <div class="manga-panels">
+                  <img src="./assets/manga-01-01.jpg" alt="社員3人、アルバイト4人。車を2台に分け、それぞれの現場へ向かう様子。" width="864" height="449" fetchpriority="high" decoding="async" />
+                  <img src="./assets/manga-01-02.jpg" alt="社長が現場に行かなくても、スタッフがお客様の家で清掃を進める様子。" width="864" height="406" fetchpriority="high" decoding="async" />
+                </div>
+              </figure>
+              <figure
+                class="manga-slide"
+                data-manga-slide
+                data-manga-title="小さな気づきが、報告になる"
+                aria-hidden="true"
               >
-                <img
-                  src="./assets/manga-02.webp"
-                  alt="ひと言が、みんなの工夫に。返事と感謝、責任者のメダル、改善提案の採用を経て、ノウハウが別の現場にも伝わる4コマ。"
-                  width="864"
-                  height="1821"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span class="manga-zoom">2ページ目を拡大して読む<span aria-hidden="true">↗</span></span>
-              </a>
-            </figure>
+                <div class="manga-panels">
+                  <img src="./assets/manga-01-03.jpg" alt="道具の置き場所をそろえたいという現場スタッフの小さな気づき。" width="864" height="365" loading="lazy" decoding="async" />
+                  <img src="./assets/manga-01-04.jpg" alt="スタッフが報告革命に、道具の置き場所をそろえる提案を投稿する様子。" width="864" height="365" loading="lazy" decoding="async" />
+                </div>
+              </figure>
+              <figure
+                class="manga-slide"
+                data-manga-slide
+                data-manga-title="ひと言が、みんなの工夫に。"
+                aria-hidden="true"
+              >
+                <div class="manga-panels">
+                  <img src="./assets/manga-02-01.jpg" alt="離れた現場から返事と感謝が届き、責任者がメダルで認める様子。" width="864" height="422" loading="lazy" decoding="async" />
+                  <img src="./assets/manga-02-02.jpg" alt="社長が改善提案を採用し、現場スタッフが担当と期限を決める様子。" width="864" height="373" loading="lazy" decoding="async" />
+                </div>
+              </figure>
+              <figure
+                class="manga-slide"
+                data-manga-slide
+                data-manga-title="小さな報告が、会社をよくする。"
+                aria-hidden="true"
+              >
+                <div class="manga-panels">
+                  <img src="./assets/manga-02-03.jpg" alt="写真とやり方をノウハウとして残し、2号車でも使う様子。" width="864" height="336" loading="lazy" decoding="async" />
+                  <img src="./assets/manga-02-04.jpg" alt="現場の工夫が集まり、社長が現場のことを見えてきたと感じる様子。" width="864" height="408" loading="lazy" decoding="async" />
+                </div>
+              </figure>
+            </div>
+            <div class="manga-carousel-controls" aria-label="漫画の表示を切り替える">
+              <button class="manga-carousel-button" type="button" data-manga-previous aria-label="前の2コマを表示">←<span> 前へ</span></button>
+              <div class="manga-dots" aria-label="漫画の進行状況">
+                <span class="is-active" data-manga-dot aria-label="1組目を表示中"></span>
+                <span data-manga-dot aria-label="2組目"></span>
+                <span data-manga-dot aria-label="3組目"></span>
+                <span data-manga-dot aria-label="4組目"></span>
+              </div>
+              <button class="manga-carousel-button" type="button" data-manga-next aria-label="次の2コマを表示"><span>次へ </span>→</button>
+            </div>
           </div>
           <div class="manga-next">
             <p>御社なら、どんな「ひと言」から始まるでしょうか。</p>

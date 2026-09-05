@@ -91,6 +91,14 @@
         toggle.setAttribute("aria-pressed", String(paused));
         toggle.textContent = paused ? "動きを再開" : "動きを止める";
       }
+      if (
+        typeof window.dispatchEvent === "function" &&
+        typeof window.CustomEvent === "function"
+      ) {
+        window.dispatchEvent(
+          new window.CustomEvent("motionchange", { detail: { paused } }),
+        );
+      }
     }
 
     setPaused(paused);
@@ -171,7 +179,76 @@
     }
   }
 
+  function initializeMangaCarousel() {
+    const carousel = document.querySelector("[data-manga-carousel]");
+    if (!carousel) return;
+
+    const slides = [...carousel.querySelectorAll("[data-manga-slide]")];
+    const dots = [...carousel.querySelectorAll("[data-manga-dot]")];
+    const previous = carousel.querySelector("[data-manga-previous]");
+    const next = carousel.querySelector("[data-manga-next]");
+    const current = carousel.querySelector("[data-manga-current]");
+    const title = carousel.querySelector("[data-manga-title]");
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (!slides.length || !previous || !next || !current || !title) return;
+
+    let index = 0;
+    let autoplayId;
+    let userInteracted = false;
+
+    function show(nextIndex, { animate = true } = {}) {
+      index = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        const active = slideIndex === index;
+        slide.classList.toggle("is-active", active);
+        slide.classList.toggle("is-entering", active && animate);
+        slide.setAttribute("aria-hidden", String(!active));
+      });
+      dots.forEach((dot, dotIndex) => {
+        const active = dotIndex === index;
+        dot.classList.toggle("is-active", active);
+        dot.setAttribute("aria-label", `${dotIndex + 1}組目${active ? "を表示中" : ""}`);
+      });
+      current.textContent = String(index + 1);
+      title.textContent = slides[index].dataset.mangaTitle || "";
+    }
+
+    function stopAutoplay() {
+      if (autoplayId) window.clearInterval(autoplayId);
+      autoplayId = undefined;
+    }
+
+    function startAutoplay() {
+      stopAutoplay();
+      if (userInteracted || reducedMotion?.matches || document.documentElement.classList.contains("motion-paused")) return;
+      autoplayId = window.setInterval(() => show(index + 1), 6500);
+    }
+
+    function handleManualChange(direction) {
+      userInteracted = true;
+      stopAutoplay();
+      show(index + direction);
+    }
+
+    previous.addEventListener("click", () => handleManualChange(-1));
+    next.addEventListener("click", () => handleManualChange(1));
+    carousel.addEventListener("mouseenter", stopAutoplay);
+    carousel.addEventListener("mouseleave", startAutoplay);
+    carousel.addEventListener("focusin", stopAutoplay);
+    carousel.addEventListener("focusout", () => window.setTimeout(startAutoplay, 0));
+    window.addEventListener("motionchange", (event) => {
+      if (event.detail?.paused) stopAutoplay();
+      else startAutoplay();
+    });
+    reducedMotion?.addEventListener?.("change", startAutoplay);
+
+    carousel.classList.add("is-ready");
+    show(0, { animate: false });
+    startAutoplay();
+  }
+
   initializeForm();
   initializeMotion();
   initializeMobileCta();
+  initializeMangaCarousel();
 })();

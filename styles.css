@@ -501,7 +501,7 @@ strong {
   font-size: 12px;
 }
 .manga-carousel {
-  max-width: 1080px;
+  max-width: 864px;
   margin-inline: auto;
 }
 .manga-carousel-heading {
@@ -534,7 +534,7 @@ strong {
 }
 .manga-panels {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
 }
 .manga-panels img {
@@ -2060,7 +2060,6 @@ html.motion-paused .hero-medal .icon {
     text-align: left;
   }
   .manga-panels {
-    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
   .manga-carousel-controls {

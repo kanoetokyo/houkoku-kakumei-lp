@@ -530,45 +530,6 @@ strong {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-.manga-transcript {
-  max-width: 840px;
-  margin: 32px auto 0;
-  border-block: 1px solid #d6d5c9;
-}
-.manga-transcript summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  min-height: 58px;
-  padding: 14px 4px;
-  list-style: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-}
-.manga-transcript summary::-webkit-details-marker {
-  display: none;
-}
-.manga-transcript[open] summary > span {
-  transform: rotate(45deg);
-}
-.manga-transcript-body {
-  padding: 0 4px 24px;
-  font-size: 16px;
-}
-.manga-transcript-body h3 {
-  margin-block: 20px 12px;
-  font-size: 18px;
-}
-.manga-transcript-body ol {
-  padding-left: 1.6em;
-  list-style: decimal;
-  color: var(--body);
-}
-.manga-transcript-body li + li {
-  margin-top: 14px;
-}
 .manga-next {
   margin-top: 40px;
   text-align: center;
@@ -2002,7 +1963,6 @@ html.motion-paused .hero-medal .icon {
     width: calc(100% - 24px);
   }
   .manga-intro,
-  .manga-transcript,
   .manga-next {
     margin-inline: 10px;
   }

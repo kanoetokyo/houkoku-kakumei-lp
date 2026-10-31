@@ -1,254 +1,87 @@
 (() => {
   "use strict";
 
-  const form = document.querySelector(".demo-form");
+  const supportsObserver = typeof window.IntersectionObserver === "function";
 
-  function initializeForm() {
-    const status = document.querySelector(".form-status");
-    const submitButton = document.querySelector(".form-submit");
-    if (!form || !status || !submitButton) return;
-
-    let submitting = false;
-    status.setAttribute("aria-live", "polite");
-    status.setAttribute("aria-atomic", "true");
-
-    function setStatus(message, state) {
-      status.textContent = message;
-      status.classList.toggle("is-success", state === "success");
-      status.classList.toggle("is-error", state === "error");
-    }
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      if (submitting) return;
-
-      submitting = true;
-      submitButton.disabled = true;
-      form.setAttribute("aria-busy", "true");
-      setStatus("送信中です。");
-
-      const controller = new AbortController();
-      let timedOut = false;
-      const timeoutId = window.setTimeout(() => {
-        timedOut = true;
-        controller.abort();
-      }, 15000);
-
-      try {
-        const response = await fetch(
-          form.getAttribute("action") || "/api/demo",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-            },
-            body: new URLSearchParams(new FormData(form)),
-            signal: controller.signal,
-          },
-        );
-
-        if (!response.ok) throw new Error("Submission failed");
-        const result = await response.json();
-        if (result?.ok !== true)
-          throw new Error("Submission was not confirmed");
-
-        setStatus(
-          "お申し込みありがとうございます。内容を確認のうえご連絡します。",
-          "success",
-        );
-        form.reset();
-      } catch {
-        setStatus(
-          timedOut
-            ? "送信の確認に時間がかかっています。入力内容は残っています。時間をおいてもう一度お試しください。"
-            : "送信に失敗しました。入力内容は残っています。時間をおいてもう一度お試しください。",
-          "error",
-        );
-      } finally {
-        window.clearTimeout(timeoutId);
-        submitButton.disabled = false;
-        form.setAttribute("aria-busy", "false");
-        submitting = false;
-      }
-    });
+  // 表示アニメーション。IntersectionObserver が使えない環境では最初から表示する。
+  const revealTargets = document.querySelectorAll(".reveal");
+  if (!supportsObserver) {
+    revealTargets.forEach((element) => element.classList.add("is-in"));
+  } else {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-in");
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    );
+    revealTargets.forEach((element) => revealObserver.observe(element));
   }
 
-  function initializeMotion() {
-    const root = document.documentElement;
-    const elements = [...document.querySelectorAll("[data-reveal]")];
-    const toggle = document.querySelector("[data-motion-toggle]");
-    const preference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-    let paused = preference?.matches ?? false;
+  // スクロールしたらヘッダーに区切り線を出す。
+  const header = document.querySelector("[data-header]");
+  if (header) {
+    const updateHeader = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+  }
 
-    const showAll = () =>
-      elements.forEach((element) => element.classList.add("is-visible"));
-
-    function setPaused(value) {
-      paused = value;
-      root.classList.toggle("motion-paused", paused);
-      if (paused) showAll();
-      if (toggle) {
-        toggle.setAttribute("aria-pressed", String(paused));
-        toggle.textContent = paused ? "動きを再開" : "動きを止める";
-      }
-      if (
-        typeof window.dispatchEvent === "function" &&
-        typeof window.CustomEvent === "function"
-      ) {
-        window.dispatchEvent(
-          new window.CustomEvent("motionchange", { detail: { paused } }),
-        );
-      }
-    }
-
-    setPaused(paused);
-
-    if (typeof window.IntersectionObserver === "function") {
-      let observer;
-      try {
-        observer = new window.IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.08 },
-        );
-        elements.forEach((element) => observer.observe(element));
-        // Only opt into hidden/reveal styles after observing every element succeeds.
-        root.classList.add("motion-ready");
-      } catch {
-        observer?.disconnect();
-        showAll();
-      }
+  // スマホ固定のLINEボタンは、ヒーローと最後のCTAが見えていない間だけ出す。
+  const mobileCta = document.querySelector("[data-mobile-cta]");
+  const heroCta = document.querySelector("[data-hero-cta]");
+  const finalCta = document.querySelector("[data-final-cta]");
+  if (mobileCta && heroCta && finalCta) {
+    if (!supportsObserver) {
+      mobileCta.classList.add("is-visible");
     } else {
-      showAll();
-    }
-
-    if (toggle) {
-      toggle.addEventListener("click", () => setPaused(!paused));
-      toggle.hidden = false;
-    }
-
-    const onPreferenceChange = (event) => setPaused(event.matches);
-    if (preference?.addEventListener) {
-      preference.addEventListener("change", onPreferenceChange);
-    } else if (preference?.addListener) {
-      preference.addListener(onPreferenceChange);
+      const visible = new Map([
+        [heroCta, true],
+        [finalCta, false],
+      ]);
+      const ctaObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => visible.set(entry.target, entry.isIntersecting));
+        const show = !visible.get(heroCta) && !visible.get(finalCta);
+        mobileCta.classList.toggle("is-visible", show);
+      });
+      ctaObserver.observe(heroCta);
+      ctaObserver.observe(finalCta);
     }
   }
 
-  function initializeMobileCta() {
-    const cta = document.querySelector(".mobile-cta");
-    if (!form || !cta || typeof window.IntersectionObserver !== "function")
-      return;
-
-    let formVisible = false;
-    function updateVisibility() {
-      // Keep a clicked/focused CTA visible until focus moves to the form or elsewhere.
-      const hide = formVisible && !cta.contains(document.activeElement);
-      cta.classList.toggle("is-hidden", hide);
-      if (hide) {
-        cta.setAttribute("aria-hidden", "true");
-        cta.setAttribute("inert", "");
-      } else {
-        cta.removeAttribute("aria-hidden");
-        cta.removeAttribute("inert");
+  // 業種別タブ。矢印・Home・Endキーでも切り替えられる。
+  const tabList = document.querySelector("[data-case-tabs]");
+  if (tabList) {
+    const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+    const select = (tab, focus) => {
+      tabs.forEach((item) => {
+        const selected = item === tab;
+        item.setAttribute("aria-selected", String(selected));
+        item.tabIndex = selected ? 0 : -1;
+        const panel = document.getElementById(item.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !selected;
+      });
+      if (focus) tab.focus();
+      if (typeof tab.scrollIntoView === "function") {
+        tab.scrollIntoView({ block: "nearest", inline: "nearest" });
       }
-    }
-
-    let observer;
-    try {
-      observer = new window.IntersectionObserver((entries) => {
-        formVisible = entries.some((entry) => entry.isIntersecting);
-        updateVisibility();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(tab, false));
+      tab.addEventListener("keydown", (event) => {
+        const keys = {
+          ArrowRight: tabs[(index + 1) % tabs.length],
+          ArrowLeft: tabs[(index - 1 + tabs.length) % tabs.length],
+          Home: tabs[0],
+          End: tabs[tabs.length - 1],
+        };
+        const next = keys[event.key];
+        if (!next) return;
+        event.preventDefault();
+        select(next, true);
       });
-      observer.observe(form);
-      cta.addEventListener("focusout", () =>
-        window.setTimeout(updateVisibility, 0),
-      );
-      cta.addEventListener("focusin", updateVisibility);
-    } catch {
-      observer?.disconnect();
-      cta.classList.remove("is-hidden");
-      cta.removeAttribute("aria-hidden");
-      cta.removeAttribute("inert");
-    }
-  }
-
-  function initializeMangaCarousel() {
-    const carousel = document.querySelector("[data-manga-carousel]");
-    if (!carousel) return;
-
-    const slides = [...carousel.querySelectorAll("[data-manga-slide]")];
-    const dots = [...carousel.querySelectorAll("[data-manga-dot]")];
-    const previous = carousel.querySelector("[data-manga-previous]");
-    const next = carousel.querySelector("[data-manga-next]");
-    const current = carousel.querySelector("[data-manga-current]");
-    const title = carousel.querySelector("[data-manga-title]");
-    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-    if (!slides.length || !previous || !next || !current || !title) return;
-
-    let index = 0;
-    let autoplayId;
-    let userInteracted = false;
-
-    function show(nextIndex, { animate = true } = {}) {
-      index = (nextIndex + slides.length) % slides.length;
-      slides.forEach((slide, slideIndex) => {
-        const active = slideIndex === index;
-        slide.classList.toggle("is-active", active);
-        slide.classList.toggle("is-entering", active && animate);
-        slide.setAttribute("aria-hidden", String(!active));
-      });
-      dots.forEach((dot, dotIndex) => {
-        const active = dotIndex === index;
-        dot.classList.toggle("is-active", active);
-        dot.setAttribute("aria-label", `${dotIndex + 1}組目${active ? "を表示中" : ""}`);
-      });
-      current.textContent = String(index + 1);
-      title.textContent = slides[index].dataset.mangaTitle || "";
-    }
-
-    function stopAutoplay() {
-      if (autoplayId) window.clearInterval(autoplayId);
-      autoplayId = undefined;
-    }
-
-    function startAutoplay() {
-      stopAutoplay();
-      if (userInteracted || reducedMotion?.matches || document.documentElement.classList.contains("motion-paused")) return;
-      autoplayId = window.setInterval(() => show(index + 1), 6500);
-    }
-
-    function handleManualChange(direction) {
-      userInteracted = true;
-      stopAutoplay();
-      show(index + direction);
-    }
-
-    previous.addEventListener("click", () => handleManualChange(-1));
-    next.addEventListener("click", () => handleManualChange(1));
-    carousel.addEventListener("mouseenter", stopAutoplay);
-    carousel.addEventListener("mouseleave", startAutoplay);
-    carousel.addEventListener("focusin", stopAutoplay);
-    carousel.addEventListener("focusout", () => window.setTimeout(startAutoplay, 0));
-    window.addEventListener("motionchange", (event) => {
-      if (event.detail?.paused) stopAutoplay();
-      else startAutoplay();
     });
-    reducedMotion?.addEventListener?.("change", startAutoplay);
-
-    carousel.classList.add("is-ready");
-    show(0, { animate: false });
-    startAutoplay();
   }
-
-  initializeForm();
-  initializeMotion();
-  initializeMobileCta();
-  initializeMangaCarousel();
 })();

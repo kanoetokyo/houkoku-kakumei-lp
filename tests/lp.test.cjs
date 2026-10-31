@@ -35,7 +35,7 @@ test("フォームと送信APIへの依存が残っていない", () => {
 });
 
 test("ページ内で参照するローカル画像・ファイルがすべて存在する", () => {
-  const refs = [...html.matchAll(/(?:src|href)="\.\/([^"#?]+)"/g)].map((m) => m[1]);
+  const refs = [...html.matchAll(/(?:src|href|srcset)="\.\/([^"#?]+)"/g)].map((m) => m[1]);
   assert.ok(refs.length > 10);
   for (const ref of new Set(refs)) {
     assert.ok(fs.existsSync(path.join(root, ref)), `${ref} がない`);

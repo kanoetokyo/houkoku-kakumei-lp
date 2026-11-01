@@ -193,7 +193,8 @@ function createBlogStore({ client, dataSourceId = DEFAULT_DATA_SOURCE_ID, now = 
 // 環境変数から Notion クライアントを作る。キーがなければ null（ブログは準備中として表示）。
 let envStore;
 function getStoreFromEnv() {
-  const apiKey = process.env.NOTION_API_KEY;
+  // 管理画面で貼り付けたときの前後の空白・改行で「API token is invalid」にならないようにする
+  const apiKey = (process.env.NOTION_API_KEY || "").trim();
   if (!apiKey) return null;
   if (!envStore) {
     const { Client } = require("@notionhq/client");

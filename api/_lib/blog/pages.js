@@ -33,6 +33,11 @@ function absoluteUrl(url) {
   return /^https?:\/\//.test(url) ? url : `${SITE_ORIGIN}${url}`;
 }
 
+// 「｜」は文節区切り（auto-phrase）の切れ目にならないので、直後で改行できるようにする
+function titleHtml(title) {
+  return escapeHtml(title).replace(/｜/g, "｜<wbr>");
+}
+
 function jsonLd(data) {
   return `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, "\\u003c")}</script>`;
 }
@@ -168,7 +173,7 @@ function postCard(post, headingTag) {
             ${thumbnail(post, "post-card-thumb")}
             <div class="post-card-body">
               ${category ? `<p class="post-card-cat">${escapeHtml(category.name)}</p>` : ""}
-              <${headingTag} class="post-card-title">${escapeHtml(post.title)}</${headingTag}>
+              <${headingTag} class="post-card-title">${titleHtml(post.title)}</${headingTag}>
               ${post.summary ? `<p class="post-card-summary">${escapeHtml(post.summary)}</p>` : ""}
               <time datetime="${escapeHtml(post.publishedAt)}">${formatDate(post.publishedAt)}</time>
             </div>
@@ -326,7 +331,7 @@ function renderArticlePage({ post, html, headings, posts }) {
                 ? `<ul class="post-cats">${post.categories.map((item) => `<li><a href="${categoryHref(item.slug)}">${escapeHtml(item.name)}</a></li>`).join("")}</ul>`
                 : ""
             }
-            <h1>${escapeHtml(post.title)}</h1>
+            <h1>${titleHtml(post.title)}</h1>
             <p class="post-meta">
               <span>公開日 <time datetime="${escapeHtml(post.publishedAt)}">${published}</time></span>
               ${updated ? `<span>更新日 <time datetime="${escapeHtml(post.updatedAt)}">${updated}</time></span>` : ""}

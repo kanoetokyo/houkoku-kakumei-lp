@@ -136,5 +136,6 @@ SEO集客用に `/blog`（一覧）と `/blog/:slug`（記事）を追加した�
 | 画像 | Notion にアップロードした画像は `/api/notion-image?id=<ブロックID>` で配信（署名付きURLの期限切れ対策）。アイキャッチは `thumbnail_url`、空なら本文の最初の画像 |
 | SEO | 記事ごとに title・説明文・canonical・OGP、構造化データ（BlogPosting・BreadcrumbList、一覧は Blog）。`/sitemap.xml` を記事つきで自動生成し、静的な sitemap.xml は削除。`/blog/feed.xml` でRSS |
 | 見た目 | ヘッダー・フッター・ボタンはLPと共通（`styles.css`）、ブログ専用は `blog.css`。記事末尾にLINE問い合わせ、関連記事3件。LPのヘッダー・フッターに「ブログ」を追加 |
+| 折り返し | 記事タイトルの「｜」の後ろに改行位置（`<wbr>`）を入れる。`balance` と `auto-phrase` の組み合わせで「方｜法」のように語の途中で切れるため、カード見出しと狭い画面の記事見出しは `text-wrap: pretty`。サムネイルは黒板画像に合わせて 16:9 |
 
 検証：`node --test tests/*.cjs` 23件成功（うちブログ14件：プロパティの変換、予約公開、slugの重複、本文HTMLのエスケープ・目次・リンク・画像、一覧・記事・404・503、サイトマップ・RSS、画像プロキシ、Vercel設定）。偽の Notion データで 320 / 390 / 768 / 1024 / 1280px を確認し、横はみ出し・画像欠落・コンソールエラーなし。1024px でもヘッダーのメニューとLINEボタンが重ならない。本物の Notion からの読み込みは、`NOTION_API_KEY` を Vercel に設定し、インテグレーションを「報告革命 ブログ管理」ページに接続してから確認する。

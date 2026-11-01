@@ -148,7 +148,7 @@
 }
 
 .post-card-thumb {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--brand-soft);
 }
@@ -191,6 +191,8 @@
   font-size: 18px;
   font-weight: 700;
   line-height: 1.55;
+  /* balance と auto-phrase の組み合わせだと語の途中（「方｜法」）で折り返すため */
+  text-wrap: pretty;
 }
 
 .post-card-summary {
@@ -268,6 +270,14 @@
   font-size: clamp(24px, 6.2vw, 36px);
   font-weight: 900;
   line-height: 1.5;
+  /* 狭い画面では balance が語の途中で折り返すことがある */
+  text-wrap: pretty;
+}
+
+@media (min-width: 768px) {
+  .post-header h1 {
+    text-wrap: balance;
+  }
 }
 
 .post-meta {

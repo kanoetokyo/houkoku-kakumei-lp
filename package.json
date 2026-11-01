@@ -1,0 +1,14 @@
+{
+  "name": "houkoku-kakumei-lp",
+  "private": true,
+  "description": "報告革命のLPとブログ（記事はNotionの「ブログ記事 (blogs)」から取得）",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "test": "node --test tests/*.cjs"
+  },
+  "dependencies": {
+    "@notionhq/client": "5.16.0"
+  }
+}

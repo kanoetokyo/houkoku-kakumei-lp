@@ -1,0 +1,658 @@
+/* ブログ（/blog, /blog/:slug）専用。色・ボタン・ヘッダー・フッターは styles.css を使う。 */
+
+.blog-main {
+  padding-bottom: 72px;
+}
+
+.header-nav a[aria-current="page"] {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* パンくず */
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.breadcrumb li {
+  min-width: 0;
+}
+
+.breadcrumb li + li::before {
+  content: "›";
+  margin: 0 8px;
+  color: var(--brand-tint);
+}
+
+.breadcrumb a {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+.breadcrumb [aria-current="page"] {
+  overflow: hidden;
+  max-width: 22em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 一覧 */
+.blog-hero {
+  padding: 28px 0 32px;
+  background:
+    radial-gradient(60% 120% at 100% 0%, var(--brand-soft), transparent 70%),
+    var(--bg);
+}
+
+.blog-hero h1 {
+  margin-top: 20px;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 900;
+}
+
+.blog-hero-sub {
+  display: block;
+  margin-top: 6px;
+  color: var(--brand);
+  font-size: 0.5em;
+  font-weight: 700;
+}
+
+.blog-lead {
+  margin-top: 12px;
+  color: var(--ink-2);
+}
+
+.blog-cats {
+  display: flex;
+  gap: 8px;
+  margin: 22px -20px 0;
+  padding: 0 20px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.blog-cats::-webkit-scrollbar {
+  display: none;
+}
+
+.blog-cats a {
+  flex: none;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.blog-cats a:hover {
+  border-color: var(--brand-tint);
+  color: var(--brand);
+}
+
+.blog-cats a[aria-current="page"] {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.blog-list {
+  padding-top: 32px;
+}
+
+.blog-empty {
+  padding: 40px 24px;
+  border: 1px dashed var(--brand-tint);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.post-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.post-card a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card a:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.post-card-thumb {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--brand-soft);
+}
+
+.post-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.post-card-thumb.is-empty {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--brand-soft), var(--brand-tint));
+}
+
+.post-card-thumb.is-empty img {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+}
+
+.post-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px 20px;
+}
+
+.post-card-cat {
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.post-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.post-card-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.75;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.post-card time {
+  margin-top: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .post-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-hero {
+    padding: 40px 0 48px;
+  }
+  .blog-cats {
+    flex-wrap: wrap;
+    margin: 28px 0 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .post-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+  }
+}
+
+/* 記事 */
+.post-container {
+  max-width: 800px;
+  padding-top: 24px;
+}
+
+.post-header {
+  margin-top: 24px;
+}
+
+.post-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.post-cats a {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.post-cats a:hover {
+  background: var(--brand-tint);
+}
+
+.post-header h1 {
+  font-size: clamp(24px, 6.2vw, 36px);
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.post-eyecatch {
+  margin: 24px 0 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.post-eyecatch img {
+  width: 100%;
+}
+
+.post-toc {
+  margin-top: 32px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.post-toc-title {
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.post-toc ol {
+  counter-reset: toc;
+}
+
+.post-toc li {
+  counter-increment: toc;
+  position: relative;
+  padding: 6px 0 6px 2em;
+  border-top: 1px dashed var(--line);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.post-toc li:first-child {
+  border-top: 0;
+}
+
+.post-toc li::before {
+  content: counter(toc) ".";
+  position: absolute;
+  left: 0;
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.post-toc a {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.post-toc a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+/* 本文 */
+.post-body {
+  margin-top: 36px;
+  font-size: 16px;
+  line-height: 1.95;
+  overflow-wrap: anywhere;
+}
+
+.post-body > * + * {
+  margin-top: 1.2em;
+}
+
+.post-body h2 {
+  margin-top: 2.6em;
+  padding: 0.2em 0 0.2em 0.8em;
+  border-left: 5px solid var(--brand);
+  font-size: clamp(21px, 5.2vw, 26px);
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.post-body h3 {
+  margin-top: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--brand-tint);
+  font-size: clamp(18px, 4.6vw, 21px);
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.post-body h2 + *,
+.post-body h3 + * {
+  margin-top: 1em;
+}
+
+.post-body a {
+  color: var(--brand-deep);
+  text-underline-offset: 3px;
+}
+
+.post-body a:hover {
+  color: var(--brand);
+}
+
+.post-body strong {
+  background: linear-gradient(transparent 62%, var(--brand-tint) 62%);
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.5em;
+}
+
+.post-body ul {
+  list-style: disc;
+}
+
+.post-body ol {
+  list-style: decimal;
+}
+
+.post-body li + li,
+.post-body li > ul,
+.post-body li > ol {
+  margin-top: 0.4em;
+}
+
+.post-body li::marker {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.post-body blockquote {
+  margin: 1.4em 0 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.post-body hr {
+  margin: 2.4em 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.post-body code {
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  background: var(--brand-soft);
+  font-size: 0.92em;
+}
+
+.post-code {
+  overflow-x: auto;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--dark);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.post-code code {
+  padding: 0;
+  background: none;
+}
+
+.post-figure {
+  margin: 1.6em 0 0;
+}
+
+/* 縦長の画面写真は大きくなりすぎないよう高さを抑える */
+.post-figure img {
+  max-height: 640px;
+  margin: 0 auto;
+  border-radius: 16px;
+  background: var(--brand-soft);
+}
+
+.post-figure figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.post-callout {
+  display: flex;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--brand-soft);
+}
+
+.post-callout-icon {
+  flex: none;
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+.post-callout > div > * + * {
+  margin-top: 0.8em;
+}
+
+.post-toggle {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.post-toggle summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.post-toggle > * + * {
+  margin-top: 0.8em;
+}
+
+.post-link a {
+  display: block;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+.post-table {
+  overflow-x: auto;
+}
+
+.post-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.post-table th,
+.post-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.post-table th {
+  background: var(--brand-soft);
+}
+
+@media (min-width: 768px) {
+  .post-container {
+    padding-top: 32px;
+  }
+  .post-body {
+    font-size: 17px;
+  }
+}
+
+/* 記事末尾の問い合わせ */
+.post-cta {
+  margin-top: 56px;
+  padding: 28px 18px;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(80% 120% at 100% 0%, rgb(241 90 25 / 0.35), transparent 60%),
+    var(--dark);
+  color: #fff;
+  text-align: center;
+}
+
+.post-cta-kicker {
+  color: #ffb08a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.post-cta-title {
+  margin-top: 8px;
+  font-size: clamp(22px, 5.6vw, 30px);
+  font-weight: 900;
+  line-height: 1.45;
+  word-break: auto-phrase;
+  text-wrap: balance;
+}
+
+.post-cta-text {
+  max-width: 34em;
+  margin: 12px auto 0;
+  color: rgb(255 255 255 / 0.82);
+  font-size: 15px;
+}
+
+.post-cta-actions {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.post-cta .btn {
+  width: 100%;
+  max-width: 420px;
+  padding-inline: 16px;
+  font-size: clamp(15px, 4.4vw, 18px);
+}
+
+.post-cta-link {
+  color: rgb(255 255 255 / 0.85);
+  font-size: 14px;
+  text-underline-offset: 3px;
+}
+
+.post-cta-link:hover {
+  color: #fff;
+}
+
+.blog-cta-wrap {
+  max-width: 880px;
+}
+
+@media (min-width: 768px) {
+  .post-cta {
+    padding: 40px 48px;
+  }
+}
+
+/* 関連記事 */
+.related {
+  margin-top: 64px;
+  padding: 56px 0 8px;
+  border-top: 1px solid var(--line);
+}
+
+.related-title {
+  margin-bottom: 24px;
+  font-size: clamp(22px, 5.4vw, 28px);
+  font-weight: 900;
+}
+
+.related-back {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.related-back a,
+.blog-message-links a {
+  color: var(--brand-deep);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+/* 404・読み込みエラー */
+.blog-message {
+  padding: 56px 0;
+}
+
+.blog-message-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-card a {
+    transition: none;
+  }
+  .post-card a:hover {
+    transform: none;
+  }
+}

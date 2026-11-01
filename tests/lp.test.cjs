@@ -123,7 +123,7 @@ class FakeElement {
   scrollIntoView() {}
 }
 
-function setup({ observer } = {}) {
+function setup({ observer, search = "", sessionStorage, va } = {}) {
   const names = ["seitai", "nail", "hair"];
   const tabs = names.map((name, i) => new FakeElement({ role: "tab", "aria-controls": `case-${name}`, "aria-selected": String(i === 0) }));
   const panels = Object.fromEntries(names.map((name, i) => {
@@ -134,6 +134,7 @@ function setup({ observer } = {}) {
   const tabList = new FakeElement();
   tabList.children = tabs;
   const reveals = [new FakeElement(), new FakeElement()];
+  const lineLinks = ["hero", "sticky"].map((place) => new FakeElement({ "data-line-cta": place }));
   const nodes = {
     "[data-header]": new FakeElement(),
     "[data-mobile-cta]": new FakeElement(),
@@ -145,6 +146,9 @@ function setup({ observer } = {}) {
   const window = {
     scrollY: 0,
     addEventListener() {},
+    location: { search },
+    sessionStorage,
+    va,
   };
   if (observer) {
     window.IntersectionObserver = class {
@@ -164,12 +168,69 @@ function setup({ observer } = {}) {
   }
   const document = {
     querySelector: (selector) => nodes[selector] || null,
-    querySelectorAll: (selector) => (selector === ".reveal" ? reveals : []),
+    querySelectorAll: (selector) => ({ ".reveal": reveals, "[data-line-cta]": lineLinks })[selector] || [],
     getElementById: (id) => panels[id] || null,
   };
-  vm.runInNewContext(script, { window, document, IntersectionObserver: window.IntersectionObserver });
-  return { tabs, panels, nodes, reveals, observers };
+  vm.runInNewContext(script, { window, document, IntersectionObserver: window.IntersectionObserver, URLSearchParams });
+  return { tabs, panels, nodes, reveals, observers, lineLinks };
 }
+
+function recorder() {
+  const events = [];
+  // vm 側で作ったオブジェクトはプロトタイプが違うので、JSONで写してから比べる。
+  return { events, va: (type, payload) => events.push(JSON.parse(JSON.stringify([type, payload]))) };
+}
+
+function memoryStorage(initial = {}) {
+  const data = new Map(Object.entries(initial));
+  return {
+    data,
+    getItem: (key) => (data.has(key) ? data.get(key) : null),
+    setItem: (key, value) => data.set(key, String(value)),
+  };
+}
+
+test("アクセス解析は、LPとブログの両方でスタブ→解析スクリプト→script.jsの順に読み込む", () => {
+  const { renderMessagePage } = require("../api/_lib/blog/pages");
+  const blog = renderMessagePage({ title: "テスト", message: "テスト" });
+  for (const [name, page, own] of [["LP", html, "./script.js"], ["ブログ", blog, "/script.js"]]) {
+    const stub = page.indexOf("window.va = window.va ||");
+    const insights = page.indexOf('<script src="/_vercel/insights/script.js" defer></script>');
+    const main = page.indexOf(`<script src="${own}" defer></script>`);
+    assert.ok(stub > 0 && insights > stub && main > insights, name);
+  }
+});
+
+test("utm_source 付きで来たら流入を送り、同じタブのLINEクリックに流入元と場所を付ける", () => {
+  const { events, va } = recorder();
+  const storage = memoryStorage();
+  const { lineLinks } = setup({ search: "?utm_source=note&utm_medium=referral&utm_campaign=intro_202611", sessionStorage: storage, va });
+  assert.deepEqual(events, [["event", { name: "UTM Landing", data: { source: "note", campaign: "intro_202611" } }]]);
+  assert.equal(storage.data.get("hk-source"), "note");
+
+  lineLinks[1].fire("click");
+  assert.deepEqual(events[1], ["event", { name: "LINE Click", data: { position: "sticky", source: "note" } }]);
+
+  // 別のページに移っても、同じタブなら流入元を覚えている。流入イベントは二重に送らない。
+  const next = recorder();
+  const again = setup({ sessionStorage: storage, va: next.va });
+  again.lineLinks[0].fire("click");
+  assert.deepEqual(next.events, [["event", { name: "LINE Click", data: { position: "hero", source: "note" } }]]);
+});
+
+test("UTMなし・sessionStorageが使えない・解析スクリプトがない環境でも動く", () => {
+  const { events, va } = recorder();
+  const blocked = { getItem() { throw new Error("blocked"); }, setItem() { throw new Error("blocked"); } };
+  const { lineLinks } = setup({ search: "?utm_source=instagram", sessionStorage: blocked, va });
+  lineLinks[0].fire("click");
+  assert.deepEqual(events.map(([, e]) => [e.name, e.data.source]), [["UTM Landing", "instagram"], ["LINE Click", "instagram"]]);
+
+  const plain = recorder();
+  setup({ va: plain.va }).lineLinks[0].fire("click");
+  assert.deepEqual(plain.events, [["event", { name: "LINE Click", data: { position: "hero", source: "(none)" } }]]);
+
+  assert.doesNotThrow(() => setup({ search: "?utm_source=note" }).lineLinks[0].fire("click"));
+});
 
 test("タブのクリックと矢印キーで表示する業種が切り替わる", () => {
   const { tabs, panels } = setup();

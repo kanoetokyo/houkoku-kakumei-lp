@@ -3,6 +3,33 @@
 
   const supportsObserver = typeof window.IntersectionObserver === "function";
 
+  // アクセス解析（Vercel Web Analytics）。UTMの集計画面は上位プラン限定なので、
+  // utm_source 付きの流入はカスタムイベントで送り、同じタブの間はLINEのクリックにも付ける。
+  const track = (name, data) => {
+    if (typeof window.va === "function") window.va("event", { name, data });
+  };
+  const clip = (value) => String(value).slice(0, 100);
+  // プライベートブラウズなどで sessionStorage が使えなくても、計測以外は動かす。
+  const session = (use) => {
+    try {
+      return use(window.sessionStorage);
+    } catch (error) {
+      return null;
+    }
+  };
+  let source = session((storage) => storage.getItem("hk-source")) || "";
+  const params = new URLSearchParams((window.location && window.location.search) || "");
+  if (params.get("utm_source")) {
+    source = clip(params.get("utm_source"));
+    track("UTM Landing", { source, campaign: clip(params.get("utm_campaign") || "") });
+    session((storage) => storage.setItem("hk-source", source));
+  }
+  document.querySelectorAll("[data-line-cta]").forEach((link) => {
+    link.addEventListener("click", () => {
+      track("LINE Click", { position: link.getAttribute("data-line-cta"), source: source || "(none)" });
+    });
+  });
+
   // 表示アニメーション。IntersectionObserver が使えない環境では最初から表示する。
   const revealTargets = document.querySelectorAll(".reveal");
   if (!supportsObserver) {

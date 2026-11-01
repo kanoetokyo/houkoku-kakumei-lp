@@ -144,6 +144,8 @@ function layout({ title, description, canonical, robots = "index, follow, max-im
     <script>document.documentElement.classList.add("js");</script>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/blog.css" />
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+    <script src="/_vercel/insights/script.js" defer></script>
     <script src="/script.js" defer></script>
   </head>
   <body class="blog-page">

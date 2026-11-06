@@ -340,7 +340,7 @@ function renderArticlePage({ post, html, headings, posts }) {
               <span>文：${escapeHtml(post.authorName)}</span>
             </p>
           </header>
-          ${post.thumbnailUrl ? `<figure class="post-eyecatch"><img src="${escapeHtml(post.thumbnailUrl)}" alt="" fetchpriority="high" decoding="async" /></figure>` : ""}
+          ${post.thumbnailUrl ? `<figure class="post-eyecatch"><img src="${escapeHtml(post.thumbnailUrl)}" alt="${escapeHtml(post.thumbnailCaption || post.title)}" fetchpriority="high" decoding="async" /></figure>` : ""}
           ${toc}
           <div class="post-body">${html}</div>
           ${ctaBox()}

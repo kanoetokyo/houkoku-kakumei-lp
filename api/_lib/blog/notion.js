@@ -73,6 +73,7 @@ function pageToPost(page, now = Date.now()) {
     })),
     authorName: getPropText(props.author_name) || DEFAULT_AUTHOR,
     thumbnailUrl: getPropText(props.thumbnail_url),
+    thumbnailCaption: "",
     publishedAt,
     updatedAt: page.last_edited_time || page.created_time || publishedAt,
     status: isDue ? "published" : rawStatus || "draft",
@@ -136,10 +137,14 @@ function createBlogStore({ client, dataSourceId = DEFAULT_DATA_SOURCE_ID, now = 
     return blocks;
   }
 
-  async function firstImageUrl(pageId) {
+  async function firstImage(pageId) {
     const response = await client.blocks.children.list({ block_id: pageId, page_size: 100 });
     const image = response.results.find((block) => block.type === "image");
-    return image ? imageProxyUrl(image.id) : "";
+    if (!image) return null;
+    return {
+      url: imageProxyUrl(image.id),
+      caption: cleanText((image.image.caption || []).map((t) => t.plain_text).join("")),
+    };
   }
 
   async function queryPages() {
@@ -167,7 +172,11 @@ function createBlogStore({ client, dataSourceId = DEFAULT_DATA_SOURCE_ID, now = 
         (await queryPages()).map((page) => pageToPost(page, time)).filter((post) => post && post.status === "published"),
       );
       for (const post of posts) {
-        if (!post.thumbnailUrl) post.thumbnailUrl = await firstImageUrl(post.id).catch(() => "");
+        if (post.thumbnailUrl) continue;
+        const image = await firstImage(post.id).catch(() => null);
+        if (!image) continue;
+        post.thumbnailUrl = image.url;
+        post.thumbnailCaption = image.caption;
       }
       return posts;
     });

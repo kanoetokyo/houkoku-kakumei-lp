@@ -107,6 +107,50 @@ function fakeRes() {
   };
 }
 
+// Notion API が返すリッチテキストと画像ブロックの形（本番の記事と同じ）
+function notionRichText(content) {
+  return [
+    {
+      type: "text",
+      text: { content, link: null },
+      annotations: { bold: false, italic: false, strikethrough: false, underline: false, code: false, color: "default" },
+      plain_text: content,
+      href: null,
+    },
+  ];
+}
+
+function notionImage(id, pageId, caption) {
+  return {
+    object: "block",
+    id,
+    parent: { type: "page_id", page_id: pageId },
+    created_time: "2026-11-06T02:40:00.000Z",
+    last_edited_time: "2026-11-06T02:40:00.000Z",
+    has_children: false,
+    archived: false,
+    in_trash: false,
+    type: "image",
+    image: {
+      caption,
+      type: "file",
+      file: { url: `https://prod-files-secure.s3.us-west-2.amazonaws.com/${id}.jpg?X-Amz-Expires=3600`, expiry_time: "2026-11-06T03:40:00.000Z" },
+    },
+  };
+}
+
+async function renderArticle(pages, blocks, slug) {
+  const store = createBlogStore({ client: fakeClient({ pages, blocks }), now: () => NOW });
+  const res = fakeRes();
+  await createHandlers(() => store).article({ url: `/blog/${slug}`, query: { slug } }, res);
+  assert.equal(res.statusCode, 200);
+  return res.body;
+}
+
+function eyecatchOf(html) {
+  return html.match(/<figure class="post-eyecatch">.*?<\/figure>/)[0];
+}
+
 test("Notionのページを記事に変換し、太字記法や空欄を整える", () => {
   const post = pageToPost(samplePages()[0], NOW);
   assert.equal(post.title, "日報が続かない理由");
@@ -244,6 +288,70 @@ test("記事ページ：本文・目次・canonical・BlogPostingを出し、ア
   assert.doesNotMatch(body, new RegExp(IMAGE_ID), "本文ではアイキャッチの画像を重ねない");
   assert.match(body, /はじめに/);
   assert.match(res.body, /あわせて読みたい記事/);
+});
+
+test("本番データの形：1枚目の画像のキャプションがアイキャッチのaltに入り、figcaptionは増えない", async () => {
+  const pageId = "41081034-d2a0-8124-ba33-c7ffd467e966";
+  const eyecatchId = "3e9f136d-92f4-40c5-87c0-1b055263a488";
+  const bodyImageId = "10c91c34-acb7-4d1f-bc00-e1cf95e36103";
+  const html = await renderArticle(
+    [page({ id: pageId, title: "社長が現場から離れるには？順番と、離れたあとも状況をつかむ仕組み", slug: "shacho-genba-hanareru", publishedAt: "2026-11-06T00:00:00.000Z" })],
+    {
+      [pageId]: [
+        notionImage(eyecatchId, pageId, notionRichText("社長が現場から離れるイメージ")),
+        block("b1", "paragraph", { rich_text: notionRichText("「自分が現場に出ないと、店が回らない」") }),
+        block("b2", "heading_2", { rich_text: notionRichText("社長が現場から離れられない3つの理由") }),
+        notionImage(bodyImageId, pageId, notionRichText("現場の仕事を抱え込んでいる社長のイメージ")),
+      ],
+    },
+    "shacho-genba-hanareru",
+  );
+  assert.equal(
+    eyecatchOf(html),
+    `<figure class="post-eyecatch"><img src="/api/notion-image?id=${eyecatchId}" alt="社長が現場から離れるイメージ" fetchpriority="high" decoding="async" /></figure>`,
+  );
+  assert.deepEqual(html.match(/<figcaption>.*?<\/figcaption>/g), ["<figcaption>現場の仕事を抱え込んでいる社長のイメージ</figcaption>"], "本文の画像のキャプションだけ");
+});
+
+test("アイキャッチのalt：キャプションが空や空白だけなら記事の題名を使い、記号はエスケープする", async () => {
+  const altFor = async (caption) => {
+    const html = await renderArticle(
+      [page({ id: "p", title: "題名の\"引用\"と<記号>", slug: "s" })],
+      { p: [notionImage(IMAGE_ID, "p", caption)] },
+      "s",
+    );
+    return eyecatchOf(html).match(/alt="([^"]*)"/)[1];
+  };
+  const titleAlt = "題名の&quot;引用&quot;と&lt;記号&gt;";
+  assert.equal(await altFor([]), titleAlt);
+  assert.equal(await altFor(notionRichText("  \n ")), titleAlt);
+  assert.equal(await altFor(notionRichText('"現場"と<社長>')), "&quot;現場&quot;と&lt;社長&gt;");
+  assert.equal(await altFor([...notionRichText("分かれた"), ...notionRichText("キャプション")]), "分かれたキャプション");
+});
+
+test("thumbnail_urlを指定した記事は別の画像がアイキャッチなので、altは題名にして1枚目は本文に残す", async () => {
+  const html = await renderArticle(
+    [page({ id: "p", title: "題名", slug: "s", thumb: "https://example.com/own.jpg" })],
+    { p: [notionImage(IMAGE_ID, "p", notionRichText("本文の図"))] },
+    "s",
+  );
+  assert.equal(eyecatchOf(html), '<figure class="post-eyecatch"><img src="https://example.com/own.jpg" alt="題名" fetchpriority="high" decoding="async" /></figure>');
+  assert.match(html, /<figcaption>本文の図<\/figcaption>/);
+});
+
+test("画像のない記事や最初の画像を読めない記事は、アイキャッチなしで一覧に出す", async () => {
+  const noImage = createBlogStore({ client: fakeClient({ pages: [page({ id: "p", title: "題名", slug: "s" })] }), now: () => NOW });
+  const [post] = await noImage.listPosts();
+  assert.equal(post.thumbnailUrl, "");
+  assert.equal(post.thumbnailCaption, "");
+
+  const client = fakeClient({ pages: [page({ id: "p", title: "題名", slug: "s" })] });
+  client.blocks.children.list = async () => {
+    throw new Error("notion down");
+  };
+  const [failed] = await createBlogStore({ client, now: () => NOW }).listPosts();
+  assert.equal(failed.thumbnailUrl, "");
+  assert.equal(failed.thumbnailCaption, "");
 });
 
 test("下書き・存在しない記事は404、Notionのキーがなければ一覧は準備中でnoindex", async () => {

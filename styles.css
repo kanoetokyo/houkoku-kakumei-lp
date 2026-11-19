@@ -993,6 +993,205 @@ b {
   }
 }
 
+/* 導入のタイミング（7名を超えたら） */
+.timing {
+  background: var(--surface);
+}
+
+.timing .section-lead {
+  max-width: 720px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.span {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.span-chart {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  padding: 26px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.span-boss {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.span-avatar {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 10px 20px -10px rgb(241 90 25 / 0.8);
+}
+
+.span-avatar svg {
+  width: 30px;
+  height: 30px;
+}
+
+.span-group {
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 12px 16px;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.span-group.is-in {
+  background: var(--brand-soft);
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.span-group.is-out {
+  border: 2px dashed #cfc7c0;
+  background: #f6f4f2;
+}
+
+.span-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 3px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.span-label b {
+  font-size: 16px;
+}
+
+.is-in .span-label {
+  background: var(--brand);
+  color: #fff;
+}
+
+.is-out .span-label {
+  background: #8b827b;
+  color: #fff;
+}
+
+.span-group ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 6px;
+}
+
+.span-group li svg {
+  width: 32px;
+  height: 32px;
+}
+
+.is-in li {
+  color: var(--brand);
+}
+
+.is-out li {
+  color: #c4bbb4;
+}
+
+.stage-list {
+  display: grid;
+  gap: 14px;
+  max-width: 980px;
+  margin: 28px auto 0;
+}
+
+.stage {
+  padding: 22px 22px 20px;
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.stage.is-now {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--brand), var(--shadow-soft);
+}
+
+.stage-badge {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stage-num {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.is-now .stage-num {
+  color: var(--brand);
+}
+
+.stage h3 {
+  margin-top: 2px;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.stage > p:last-child {
+  margin-top: 6px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.timing-cta {
+  margin-top: 40px;
+  font-size: clamp(19px, 5vw, 26px);
+  font-weight: 900;
+  line-height: 1.6;
+  text-align: center;
+  font-feature-settings: "palt";
+}
+
+@media (min-width: 768px) {
+  .stage-list {
+    grid-template-columns: 1fr 1.15fr 1fr;
+  }
+}
+
+@media (min-width: 960px) {
+  .span-chart {
+    grid-template-columns: auto 1.25fr 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 32px;
+  }
+  .span-boss {
+    flex-direction: column;
+  }
+  .span-group {
+    max-width: none;
+  }
+  .span-group li svg {
+    width: 38px;
+    height: 38px;
+  }
+}
+
 /* グループLINEからの引っ越し */
 .compare {
   background: linear-gradient(var(--bg), #fff4ea);

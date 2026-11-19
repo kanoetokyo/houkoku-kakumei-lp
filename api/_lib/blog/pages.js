@@ -185,9 +185,9 @@ function postCard(post, headingTag) {
 
 function ctaBox() {
   return `<aside class="post-cta" data-final-cta aria-labelledby="post-cta-title">
-        <p class="post-cta-kicker">店舗・現場をもつ経営者の方へ</p>
-        <p class="post-cta-title" id="post-cta-title">現場の“いま”が、スマホに届く。</p>
-        <p class="post-cta-text">報告革命は、スタッフが写真とひと言で今日の現場を報告できるアプリです。iPhone・Androidに対応し、1人月額550円（税込）から使えます。</p>
+        <p class="post-cta-kicker">グループLINEで仕事を回している会社へ</p>
+        <p class="post-cta-title" id="post-cta-title">仕事のやりとり、いつまでLINEで？</p>
+        <p class="post-cta-text">報告革命は、グループLINEを卒業するための仕事専用アプリです。報告・お知らせ・お願いがトークに流れず残り、パソコンを持たないスタッフも自分のスマホで使えます。1人月額550円（税込）。</p>
         <div class="post-cta-actions">
           <a class="btn btn-line btn-lg" href="${LINE_URL}" target="_blank" rel="noopener" data-line-cta="blog">
             ${chatIcon()}LINEで画面を見てみる${arrowIcon()}

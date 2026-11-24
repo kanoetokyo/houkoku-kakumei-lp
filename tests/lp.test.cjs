@@ -528,3 +528,11 @@ test("CSS・JSにはキャッシュ期間を付けない（HTMLだけ新しく�
     assert.doesNotMatch(rule.source, /\.css|\.js|script|styles/, `${rule.source} に Cache-Control がある`);
   }
 });
+
+test("CSS：スクロール表示の印（.is-in）を、ほかの部品の色付けに単独で使わない", () => {
+  // .is-in はスクロールで表示された要素に付く。`.is-in li` のように書くと、表示された章の箇条書きがすべて色付けされる。
+  const css = fs.readFileSync(path.join(root, "styles.css"), "utf8");
+  const selectors = [...css.matchAll(/([^{}]+)\{/g)].flatMap((m) => m[1].split(",").map((s) => s.trim()));
+  const loose = selectors.filter((s) => /(^|\s)\.is-in\b/.test(s));
+  assert.deepEqual(loose, [], `単独の .is-in：${loose.join(" / ")}`);
+});

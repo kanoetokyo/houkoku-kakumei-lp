@@ -1080,12 +1080,12 @@ b {
   font-size: 16px;
 }
 
-.is-in .span-label {
+.span-group.is-in .span-label {
   background: var(--brand);
   color: #fff;
 }
 
-.is-out .span-label {
+.span-group.is-out .span-label {
   background: #8b827b;
   color: #fff;
 }
@@ -1102,11 +1102,11 @@ b {
   height: 32px;
 }
 
-.is-in li {
+.span-group.is-in li {
   color: var(--brand);
 }
 
-.is-out li {
+.span-group.is-out li {
   color: #c4bbb4;
 }
 
@@ -2348,7 +2348,7 @@ b {
   position: relative;
   padding: 20px 52px 20px 22px;
   font-size: 16px;
-  text-wrap: balance;
+  text-wrap: pretty;
   font-weight: 700;
   line-height: 1.6;
   list-style: none;
@@ -2612,5 +2612,125 @@ b {
   .mobile-cta,
   .store-link {
     transition: none;
+  }
+}
+
+/* ============================================================
+   スマホの読みやすさ・押しやすさ（2026-11-25 点検）
+   ・補足の文字は12px以上、本文の小さい説明は15px
+   ・押せるリンクは高さ44px以上
+   ・章の余白と画面画像を詰めて、縦の長さを短く
+   ============================================================ */
+.proof-stats dt {
+  font-size: 12px;
+}
+
+.proof-stats dd {
+  white-space: nowrap;
+}
+
+.proof-note,
+.price-examples small,
+.store-link small {
+  font-size: 12px;
+}
+
+.visual-note,
+.move-tag {
+  font-size: 13px;
+}
+
+.video-box figcaption small,
+.copyright {
+  font-size: 12px;
+}
+
+.move-from > p:last-child,
+.move-to > p:last-child,
+.stage > p:last-child,
+.scale-points {
+  font-size: 15px;
+}
+
+/* 押しやすさ：文中のリンクも指で押せる高さに */
+.video-box figcaption a,
+.reading-more a {
+  display: inline-block;
+  padding: 10px 0;
+}
+
+.footer-note {
+  font-size: 12px;
+}
+
+.footer-nav a {
+  display: inline-block;
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+.footer-brand p a {
+  display: inline-block;
+  padding: 10px 0;
+}
+
+@media (max-width: 767px) {
+  /* 章の上下の余白（80px → 60px） */
+  .section {
+    padding: 60px 0;
+  }
+  .section-head {
+    margin-bottom: 32px;
+  }
+
+  /* ヒーローの特長：2つずつ並ぶように詰める */
+  .hero-badges {
+    gap: 6px;
+  }
+  .hero-badges li {
+    padding: 6px 10px;
+  }
+
+  /* 導入実績の数字：「名」が次の行に落ちない大きさ */
+  .proof-stats dd b {
+    font-size: clamp(24px, 7.4vw, 40px);
+  }
+
+  /* 画面画像は少し小さく（縦に長くなりすぎないように） */
+  .feature .phone {
+    --pw: 230px;
+  }
+  .feature {
+    gap: 20px;
+  }
+  .case-shot {
+    max-height: 520px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(#000 82%, transparent);
+    mask-image: linear-gradient(#000 82%, transparent);
+  }
+
+  /* アプリの章の飾りの画面は、同じ画面がほかの章にあるのでスマホでは出さない */
+  .app-visual {
+    display: none;
+  }
+
+  /* 「LINEはプライベートに。仕事は報告革命に。」はアイコンを上にして中央そろえ */
+  .answer-main {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  /* フッターのリンクは2列に並べ、押しやすくする */
+  .footer-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: dense;
+    gap: 0 16px;
+  }
+  /* 長いリンクは1行まるごと使う（2列だと「記」だけ次の行に落ちる） */
+  .footer-nav a[href*="tokushoho"] {
+    grid-column: 1 / -1;
   }
 }

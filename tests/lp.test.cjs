@@ -519,3 +519,12 @@ test("LPの動画：18:54から始まる設定と場面の表示、構造化デ�
   assert.equal(video.embedUrl, "https://www.youtube.com/embed/Fr8tt8u1sz8");
   assert.deepEqual(video.hasPart.map((c) => [c.name, c.startOffset, c.endOffset]), [["社内SNSアプリ「報告革命」", 1134, 1526]]);
 });
+
+test("CSS・JSにはキャッシュ期間を付けない（HTMLだけ新しくなり、古いCSS・JSと組み合わさるのを防ぐ）", () => {
+  const config = JSON.parse(fs.readFileSync(path.join(root, "vercel.json"), "utf8"));
+  for (const rule of config.headers) {
+    const cache = rule.headers.find((h) => h.key.toLowerCase() === "cache-control");
+    if (!cache) continue;
+    assert.doesNotMatch(rule.source, /\.css|\.js|script|styles/, `${rule.source} に Cache-Control がある`);
+  }
+});

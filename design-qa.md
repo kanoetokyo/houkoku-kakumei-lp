@@ -202,3 +202,9 @@ LPのスタンプが、10月13日版の「AIカノエくん」（動きが硬い
 プライバシーポリシー（アプリ側 `src/app/legal/privacy/page.tsx`）に、公式サイトで Google アナリティクスと Vercel Web Analytics を使うことを追記（kanoetokyo/hokokukakumei の別PR）。
 
 検証：`node --test tests/*.cjs` 38件成功（GA4のイベント4種、gtag がない環境、タグの読み込み条件と測定IDのLP・ブログ一致、FAQPage と見えているFAQの一致、タイトル・説明文・canonical・www転送・llms.txt、スタンプの差し替え）。ローカルで dataLayer にイベントが積まれ、GA のスクリプトは読み込まれないことを確認。320〜1280px で横はみ出しなし。
+
+### 反映後の修正（2026年11月25日）
+
+- www のトップ（`/`）が `/:path*` のルールで転送されていなかったので、`/` と `/:path+` のルールに分けた
+- `section_view` が、なめらかなスクロールで通り過ぎた章まで送っていたので、1秒以上表示された章だけにした
+- フォントのCSSを非同期（preload→stylesheet）にしたところ、フォントがキャッシュ済みの2回目以降の訪問で、表示後に @font-face が効いて文字が差し替わり、ヒーローのLINEボタンがずれた（PageSpeed で CLS 0.152 が再発）。通常の `<link rel="stylesheet">` に戻し、`display=optional` だけ残した。これで最初の表示までにフォントがあれば使い、なければ端末の文字のまま、途中で差し替わらない

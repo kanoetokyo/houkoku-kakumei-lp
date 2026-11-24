@@ -1,6 +1,8 @@
 :root {
   --brand: #f15a19;
   --brand-deep: #c9450c;
+  /* 小さい文字用のオレンジ。白・--brand-soft の上でも 4.5:1 以上 */
+  --brand-text: #b83f0b;
   --brand-ink: #8a3209;
   --brand-soft: #fff3ea;
   --brand-tint: #ffd9c2;
@@ -299,7 +301,7 @@ b {
 }
 
 .header-nav a:hover {
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .site-header .btn {
@@ -348,7 +350,7 @@ b {
 }
 
 .kicker-em {
-  color: var(--brand);
+  color: var(--brand-text);
   font-weight: 700;
 }
 
@@ -692,7 +694,7 @@ b {
 .eyebrow {
   display: inline-block;
   margin-bottom: 14px;
-  color: var(--brand);
+  color: var(--brand-text);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1142,7 +1144,7 @@ b {
 }
 
 .is-now .stage-num {
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .stage h3 {
@@ -1237,7 +1239,7 @@ b {
 }
 
 .move-to .move-tag {
-  color: var(--brand-deep);
+  color: var(--brand-text);
 }
 
 .move-from h3 {
@@ -1359,7 +1361,7 @@ b {
 .concept .eyebrow {
   padding: 6px 18px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.18);
+  background: rgb(110 30 0 / 0.3);
   color: #fff;
   font-size: 15px;
 }
@@ -1407,7 +1409,7 @@ b {
 }
 
 .is-us .scale-name {
-  color: var(--brand);
+  color: var(--brand-text);
   font-size: 16px;
 }
 
@@ -1521,7 +1523,7 @@ b {
   align-items: center;
   gap: 10px;
   margin-bottom: 14px;
-  color: var(--brand);
+  color: var(--brand-text);
   font-size: 14px;
   font-weight: 700;
 }
@@ -1719,11 +1721,11 @@ b {
 }
 
 .case-tabs button:hover {
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .case-tabs button[aria-selected="true"] {
-  background: var(--brand);
+  background: var(--brand-deep);
   color: #fff;
   box-shadow: 0 10px 20px -12px rgb(241 90 25 / 0.9);
 }
@@ -1748,7 +1750,7 @@ b {
   padding: 2px 12px;
   border-radius: 999px;
   background: var(--brand-soft);
-  color: var(--brand-deep);
+  color: var(--brand-text);
   font-size: 13px;
   font-weight: 700;
 }
@@ -2126,6 +2128,77 @@ b {
   }
 }
 
+/* ブログ記事への導線 */
+.reading {
+  background: var(--bg);
+}
+
+.reading-list {
+  display: grid;
+  gap: 12px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.reading-list a {
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: 18px 52px 18px 20px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.reading-list a::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  color: var(--brand);
+  font-weight: 700;
+  transform: translateY(-50%);
+}
+
+.reading-list a:hover {
+  box-shadow: inset 0 0 0 2px var(--brand), var(--shadow-soft);
+  transform: translateY(-2px);
+}
+
+.reading-tag {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: var(--brand-deep);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.reading-list b {
+  display: block;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.reading-more {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.reading-more a {
+  color: var(--brand-deep);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .reading-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* FAQ */
 .faq {
   background: var(--bg);
@@ -2164,7 +2237,7 @@ b {
 .faq summary::before {
   content: "Q";
   margin-right: 10px;
-  color: var(--brand);
+  color: var(--brand-text);
   font-weight: 900;
 }
 

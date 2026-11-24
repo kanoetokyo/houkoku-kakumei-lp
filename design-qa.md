@@ -181,3 +181,24 @@ LPのスタンプが、10月13日版の「AIカノエくん」（動きが硬い
 | ブログ | 同じ日に Notion の全18記事の末尾の紹介節を「グループLINEの卒業」＋7名のタイミングに書き換え（記録は `cc_workwork/houkoku-blog-seo/changelog.md`） |
 
 検証：`node --test tests/*.cjs` 30件成功。320 / 360 / 390 / 768 / 1024 / 1280 / 1440px で横はみ出しなし（新しい章と位置づけの章の要素も個別に確認）。
+
+## SEO の強化と Google アナリティクス（GA4）の計測（2026年11月25日・日本時間）
+
+改修前の PageSpeed Insights（モバイル、本番）：パフォーマンス88・ユーザー補助97・おすすめの方法100・SEO100。CLS 0.152（ヒーローのLINEボタンの位置がずれる）、表示を止める読み込み（Google Fonts のCSS 119KB）、画像の削減余地 326KB（ヒーローの動くスタンプ 248KB・画面画像）、オレンジの小さい文字と業種タブのコントラスト不足。
+
+| 項目 | 内容 |
+| --- | --- |
+| タイトル・説明文 | 「グループLINEを卒業する業務連絡・日報アプリ｜報告革命」。検索で使われる言葉（業務連絡・日報アプリ）を入れ、説明文は約100字に短縮。ヒーローの小見出しも「“次”の業務連絡アプリ」 |
+| 構造化データ | Organization（ロゴを180pxのPNGに、運営会社サイト）、WebPage（dateModified）、SoftwareApplication（業務連絡・日報アプリ、App Store／Google Play、スクリーンショット）に加え、FAQPage を追加。FAQPage はページのFAQから生成し、テストで一致を確認 |
+| 内部リンク | FAQ の前に「ブログで詳しく」（LINEの業務利用・LINEグループのルール・10人の壁・周知徹底の4記事と一覧）を追加。head に RSS の alternate |
+| www | `www.hokokukakumei.com` が同じページを200で返していた（重複ページ）。vercel.json の redirects で本ドメインへ 308 転送 |
+| キャッシュ・ヘッダー | `/assets/*` は1日（＋再検証7日）、CSS/JSは1時間。Referrer-Policy: strict-origin-when-cross-origin |
+| llms.txt | AI検索・AIアシスタント向けに、製品の説明・対象・料金・主要ページを `/llms.txt` に置いた |
+| サイトマップ | LP の lastmod を 2026-11-25 に（`api/_lib/blog/handlers.js`。LP を変えたら更新する） |
+| 表示速度 | Google Fonts は preload→stylesheet で表示を止めずに読み、`display=optional`（間に合わなければ端末の文字のまま、文字の差し替えでレイアウトがずれない）。LP とブログの両方。ヒーローの画面画像に600px版（srcset）。動くスタンプは最初は静止画（20KB）にし、読み込み完了後に差し替え |
+| コントラスト | 小さいオレンジ文字に `--brand-text: #b83f0b`（白・薄オレンジの上で4.5:1以上）。選択中の業種タブは `--brand-deep` の背景。位置づけ章の小見出しの背景を濃く。LINEの緑ボタン（白文字）はLINEの配色なので変えていない |
+| GA4 | 測定ID `G-C5X5KD0WKV`（プロパティ「報告革命LP」、osouji.oimachi@gmail.com の「Google 広告アカウント」）。`location.hostname === "hokokukakumei.com"` のときだけ送る（ローカル・プレビューを混ぜない）。LP とブログで同じ。イベントは `line_click`（cta_position）、`faq_open`（faq_question）、`case_tab_select`（case_industry）、`section_view`（section_id）。GA4側でこの4つのパラメータをカスタムディメンションに登録済み、データ保持は14か月、Search Console とリンク済み。`line_click` は届いた後にキーイベントにする |
+
+プライバシーポリシー（アプリ側 `src/app/legal/privacy/page.tsx`）に、公式サイトで Google アナリティクスと Vercel Web Analytics を使うことを追記（kanoetokyo/hokokukakumei の別PR）。
+
+検証：`node --test tests/*.cjs` 38件成功（GA4のイベント4種、gtag がない環境、タグの読み込み条件と測定IDのLP・ブログ一致、FAQPage と見えているFAQの一致、タイトル・説明文・canonical・www転送・llms.txt、スタンプの差し替え）。ローカルで dataLayer にイベントが積まれ、GA のスクリプトは読み込まれないことを確認。320〜1280px で横はみ出しなし。

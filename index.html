@@ -3,16 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>報告革命｜グループLINEを卒業する、スマホだけで使える仕事のやりとりアプリ</title>
-    <meta
-      name="description"
-      content="報告革命は、仕事のやりとりをグループLINEから卒業するためのアプリです。報告・お知らせ・お願いがトークに流れず残り、だれが確認したか、終わったかもわかります。パソコンを持たないスタッフも自分のスマホで使えます。スタッフが7名を超えてグループLINEでは回らなくなってきた、でもSlackやChatworkは大げさという会社に。1人月額550円（税込）。お問い合わせはLINEから。"
-    />
+    <!-- Google アナリティクス（GA4）。本番のドメインだけで送る（ローカル・プレビューの閲覧を混ぜない） -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      if (location.hostname === "hokokukakumei.com") {
+        var gaScript = document.createElement("script");
+        gaScript.async = true;
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-C5X5KD0WKV";
+        document.head.appendChild(gaScript);
+        gtag("js", new Date());
+        gtag("config", "G-C5X5KD0WKV");
+      }
+    </script>
+    <title>グループLINEを卒業する業務連絡・日報アプリ｜報告革命</title>
+    <meta name="description" content="報告革命は、グループLINEを卒業するための業務連絡・日報アプリ。報告・お知らせ・お願いがトークに流れず残り、だれが確認したかもわかります。スタッフが7名を超えた会社に。パソコン不要、1人月額550円（税込）。" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#f15a19" />
     <link rel="canonical" href="https://hokokukakumei.com/" />
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title="報告革命ブログ" href="https://hokokukakumei.com/blog/feed.xml" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="報告革命" />
@@ -44,8 +55,16 @@
             "@id": "https://hokokukakumei.com/#organization",
             "name": "株式会社カノエ",
             "alternateName": "KANOE Inc.",
-            "url": "https://hokokukakumei.com/",
-            "logo": "https://hokokukakumei.com/assets/favicon.svg",
+            "url": "https://www.kanoebiz.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://hokokukakumei.com/assets/apple-touch-icon.png",
+              "width": 180,
+              "height": 180
+            },
+            "sameAs": [
+              "https://www.kanoebiz.com/"
+            ],
             "contactPoint": {
               "@type": "ContactPoint",
               "contactType": "sales",
@@ -57,18 +76,27 @@
             "@type": "WebSite",
             "@id": "https://hokokukakumei.com/#website",
             "name": "報告革命",
+            "alternateName": "ほうこくかくめい",
             "url": "https://hokokukakumei.com/",
             "inLanguage": "ja",
-            "publisher": { "@id": "https://hokokukakumei.com/#organization" }
+            "publisher": {
+              "@id": "https://hokokukakumei.com/#organization"
+            }
           },
           {
             "@type": "WebPage",
             "@id": "https://hokokukakumei.com/#webpage",
-            "name": "報告革命｜グループLINEを卒業する、スマホだけで使える仕事のやりとりアプリ",
+            "name": "グループLINEを卒業する業務連絡・日報アプリ｜報告革命",
+            "description": "報告革命は、グループLINEを卒業するための業務連絡・日報アプリ。報告・お知らせ・お願いがトークに流れず残り、だれが確認したかもわかります。スタッフが7名を超えた会社に。パソコン不要、1人月額550円（税込）。",
             "url": "https://hokokukakumei.com/",
             "inLanguage": "ja",
-            "isPartOf": { "@id": "https://hokokukakumei.com/#website" },
-            "about": { "@id": "https://hokokukakumei.com/#software" },
+            "dateModified": "2026-11-25",
+            "isPartOf": {
+              "@id": "https://hokokukakumei.com/#website"
+            },
+            "about": {
+              "@id": "https://hokokukakumei.com/#software"
+            },
             "primaryImageOfPage": {
               "@type": "ImageObject",
               "url": "https://hokokukakumei.com/assets/og-image.png",
@@ -81,10 +109,21 @@
             "@id": "https://hokokukakumei.com/#software",
             "name": "報告革命",
             "applicationCategory": "BusinessApplication",
+            "applicationSubCategory": "業務連絡・日報アプリ",
             "operatingSystem": "iOS, Android, Web",
+            "inLanguage": "ja",
             "url": "https://hokokukakumei.com/",
             "image": "https://hokokukakumei.com/assets/og-image.png",
-            "description": "仕事のやりとりをグループLINEから卒業するためのアプリです。報告はタイムライン、全員へのお知らせは掲示板、お願いはタスクに分けて残せ、パソコンを持たないスタッフも自分のスマホで使えます。",
+            "screenshot": "https://hokokukakumei.com/assets/screens/timeline.webp",
+            "installUrl": [
+              "https://apps.apple.com/jp/app/%E5%A0%B1%E5%91%8A%E9%9D%A9%E5%91%BD/id6804531486",
+              "https://play.google.com/store/apps/details?id=jp.co.kanoe.houkokukakumei"
+            ],
+            "sameAs": [
+              "https://apps.apple.com/jp/app/%E5%A0%B1%E5%91%8A%E9%9D%A9%E5%91%BD/id6804531486",
+              "https://play.google.com/store/apps/details?id=jp.co.kanoe.houkokukakumei"
+            ],
+            "description": "仕事のやりとりをグループLINEから卒業するための業務連絡・日報アプリです。報告はタイムライン、全員へのお知らせは掲示板、お願いはタスクに分けて残せ、パソコンを持たないスタッフも自分のスマホで使えます。",
             "featureList": [
               "写真・動画つきの日報と報告",
               "日報のひな形",
@@ -108,18 +147,104 @@
               "description": "1アカウントあたりの月額料金（税込）。初期費用・契約条件はLINEでご案内します。",
               "availability": "https://schema.org/InStock"
             },
-            "publisher": { "@id": "https://hokokukakumei.com/#organization" }
+            "publisher": {
+              "@id": "https://hokokukakumei.com/#organization"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://hokokukakumei.com/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "LINEと何が違うのですか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "LINEは、プライベートの連絡も仕事の連絡も同じトークに流れていきます。報告革命は仕事専用で、報告はタイムライン、全員へのお知らせは掲示板、お願いはタスク、と用途ごとに分けて残せます。だれが確認したか、お願いが終わったかもわかります。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "SlackやChatworkとは何が違いますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "SlackやChatworkは、多くの機能をそなえたビジネスチャットです。報告革命は、パソコンを持たないスタッフが自分のスマホで使うことを前提に、「写真とひと言で報告する」「お知らせを確認する」「お願いする」に絞っています。覚えることが少ないので、LINEが使える方ならすぐに使えます。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "パソコンがなくても使えますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "はい。投稿・確認・返事まで、すべてスマホだけで使えます。iPhone・Androidのアプリがあり、パソコンのブラウザからも利用できます。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "ITが苦手なスタッフでも使えますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "写真を撮って、ひと言書いて、投稿するだけです。日報のひな形も用意できるので、書くことに迷いません。LINEを使えている方なら、すぐに慣れていただけます。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "スタッフ個人のスマホで使っても大丈夫ですか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "はい。仕事用のアカウントで使うので、個人のLINEや電話番号を交換する必要はありません。プライベートと仕事の連絡を分けられます。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "いきなりLINEグループをやめないといけませんか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "いいえ。まずは日報や報告だけを報告革命に移し、慣れてきたらお知らせやお願いも移す、という進め方もできます。どこから移すかもご相談ください。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "何人くらいの会社に向いていますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "スタッフが7名を超えたころが、導入のタイミングです。ひとりで目を配れるのは7人くらいまでと言われ、それを超えると、グループLINEだけでは報告や連絡が回らなくなりがちです。20〜30名ほど、100名以下の会社を想定しています。いまは5名から22名の会社でご利用いただいています（2026年9月時点）。料金は使う人数分だけなので、少人数でも始めやすくなっています。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "アルバイト・パートも使えますか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "使えます。短い投稿でも参加できるので、雇用形態を問わず、現場の気づきや感謝を共有できます。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "LINEで問い合わせたら、しつこく営業されませんか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "しつこい営業は行いません。「まず画面だけ見たい」「料金だけ知りたい」といったご相談も歓迎です。"
+                }
+              }
+            ]
           }
         ]
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Webフォントは表示を止めずに読み込む。display=optional なので、間に合わなければ端末の文字のまま（あとから文字が入れ替わってレイアウトがずれない） -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=optional" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=optional" /></noscript>
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      href="./assets/screens/timeline.webp"
+      imagesrcset="./assets/screens/timeline-600.webp 600w, ./assets/screens/timeline.webp 780w"
+      imagesizes="(min-width: 960px) 336px, 263px"
+      type="image/webp"
     />
-    <link rel="preload" as="image" href="./assets/screens/timeline.webp" type="image/webp" />
     <script>document.documentElement.classList.add("js");</script>
     <link rel="stylesheet" href="./styles.css" />
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -163,7 +288,7 @@
         <div class="container hero-grid">
           <div class="hero-copy">
             <p class="hero-kicker">
-              <span>グループLINEの</span><span class="kicker-em">“次”の連絡アプリ</span>
+              <span>グループLINEの</span><span class="kicker-em">“次”の業務連絡アプリ</span>
             </p>
             <h1 id="hero-title" class="hero-title">
               <span class="nw">仕事のやりとり、</span><br /><span class="marker nw">いつまでLINEで？</span>
@@ -205,6 +330,8 @@
                 <div class="status-bar" aria-hidden="true"><span>9:41</span><i></i></div>
                 <img
                   src="./assets/screens/timeline.webp"
+                  srcset="./assets/screens/timeline-600.webp 600w, ./assets/screens/timeline.webp 780w"
+                  sizes="(min-width: 960px) 336px, 263px"
                   alt="スタッフの日報が写真つきで並ぶ、報告革命のタイムライン画面"
                   width="780"
                   height="1688"
@@ -212,17 +339,16 @@
                 />
               </div>
             </figure>
-            <picture>
-              <source srcset="./assets/stamp-kanoe-sugoi-still.webp" media="(prefers-reduced-motion: reduce)" />
-              <img
-                class="hero-stamp"
-                src="./assets/stamp-kanoe-sugoi.webp"
-                alt=""
-                width="228"
-                height="270"
-                aria-hidden="true"
-              />
-            </picture>
+            <!-- 最初は静止画（約20KB）。ページを読み込み終えてから動くスタンプ（約250KB）に差し替える（script.js） -->
+            <img
+              class="hero-stamp"
+              src="./assets/stamp-kanoe-sugoi-still.webp"
+              data-animated-src="./assets/stamp-kanoe-sugoi.webp"
+              alt=""
+              width="228"
+              height="270"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </section>
@@ -852,6 +978,43 @@
               <p>招待メールを送るだけ。最初の投稿・返事の仕方まで、立ち上げをサポートします。個人のLINEの交換はいりません。</p>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <!-- ブログ -->
+      <section class="section reading" id="reading" aria-labelledby="reading-title">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="eyebrow">ブログで詳しく</p>
+            <h2 id="reading-title"><span class="nw">グループLINEの卒業を、</span><span class="nw">もう少し詳しく。</span></h2>
+          </div>
+          <ul class="reading-list">
+            <li class="reveal">
+              <a href="/blog/line-gyomu-riyou">
+                <span class="reading-tag">LINEの業務利用</span>
+                <b>LINEの業務利用のリスク6つ｜禁止の前に決めたいルールと移るタイミング</b>
+              </a>
+            </li>
+            <li class="reveal">
+              <a href="/blog/line-group-shigoto-rule">
+                <span class="reading-tag">LINEグループ</span>
+                <b>仕事のLINEグループのルール7つ｜報告が流れる・探せない問題の対策も</b>
+              </a>
+            </li>
+            <li class="reveal">
+              <a href="/blog/kaisha-10nin-no-kabe">
+                <span class="reading-tag">導入のタイミング</span>
+                <b>会社の10人の壁とは？社長の目が届かなくなる前に整えたい5つのこと</b>
+              </a>
+            </li>
+            <li class="reveal">
+              <a href="/blog/shuchi-tettei">
+                <span class="reading-tag">お知らせ・掲示板</span>
+                <b>周知徹底の方法7つ｜店舗の連絡事項が全員に伝わるお知らせの書き方と例文</b>
+              </a>
+            </li>
+          </ul>
+          <p class="reading-more reveal"><a href="/blog">ブログの記事をすべて見る</a></p>
         </div>
       </section>
 

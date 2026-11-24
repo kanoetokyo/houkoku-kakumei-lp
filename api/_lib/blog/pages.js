@@ -5,6 +5,8 @@ const { SITE_ORIGIN, escapeHtml } = require("./blocks");
 
 const LINE_URL = "https://lin.ee/RuumZrp";
 const BLOG_NAME = "報告革命ブログ";
+// Google アナリティクス（GA4）の測定ID。LP（index.html）と同じもの。
+const GA_ID = "G-C5X5KD0WKV";
 const BLOG_DESCRIPTION = "店舗・現場をもつ経営者のための、報告・日報・情報共有のヒント。スタッフからの報告が自然に集まる仕組みづくりを、現場目線で紹介します。";
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/assets/og-image.png`;
 const ORGANIZATION = {
@@ -111,6 +113,22 @@ function footer() {
     </svg>`;
 }
 
+// 本番のドメインだけで送る（ローカル・プレビューの閲覧を混ぜない）。LP の index.html と同じ書き方。
+function gaTag() {
+  return `<script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      if (location.hostname === "hokokukakumei.com") {
+        var gaScript = document.createElement("script");
+        gaScript.async = true;
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=${GA_ID}";
+        document.head.appendChild(gaScript);
+        gtag("js", new Date());
+        gtag("config", "${GA_ID}");
+      }
+    </script>`;
+}
+
 function layout({ title, description, canonical, robots = "index, follow, max-image-preview:large", ogType = "website", image, schema, current, body }) {
   const ogImage = absoluteUrl(image);
   return `<!doctype html>
@@ -118,6 +136,7 @@ function layout({ title, description, canonical, robots = "index, follow, max-im
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    ${gaTag()}
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />
     <meta name="robots" content="${robots}" />
@@ -140,7 +159,8 @@ function layout({ title, description, canonical, robots = "index, follow, max-im
     ${schema ? jsonLd(schema) : ""}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=optional" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=optional" /></noscript>
     <script>document.documentElement.classList.add("js");</script>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/blog.css" />

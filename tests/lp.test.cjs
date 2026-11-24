@@ -35,7 +35,11 @@ test("フォームと送信APIへの依存が残っていない", () => {
 });
 
 test("ページ内で参照するローカル画像・ファイルがすべて存在する", () => {
-  const refs = [...html.matchAll(/(?:src|href|srcset)="\.\/([^"#?]+)"/g)].map((m) => m[1]);
+  const refs = [...html.matchAll(/(?:src|href)="\.\/([^"#?]+)"/g)].map((m) => m[1]);
+  // srcset / imagesrcset は「パス 幅w, パス 幅w」の並びなので、1件ずつに分ける。
+  for (const m of html.matchAll(/(?:srcset|imagesrcset|data-animated-src)="([^"]+)"/g)) {
+    for (const candidate of m[1].split(",")) refs.push(candidate.trim().split(/\s+/)[0].replace(/^\.\//, ""));
+  }
   assert.ok(refs.length > 10);
   for (const ref of new Set(refs)) {
     assert.ok(fs.existsSync(path.join(root, ref)), `${ref} がない`);
@@ -99,6 +103,9 @@ class FakeElement {
     this.tabIndex = 0;
     this.focused = false;
     this.children = [];
+    this.textContent = attrs.text || "";
+    this.open = false;
+    this.id = attrs.id || "";
   }
   getAttribute(name) {
     return this.attrs.has(name) ? this.attrs.get(name) : null;
@@ -117,15 +124,19 @@ class FakeElement {
   querySelectorAll(selector) {
     return selector === '[role="tab"]' ? this.children : [];
   }
+  querySelector(selector) {
+    return (this.selectors || {})[selector] || null;
+  }
   focus() {
     this.focused = true;
   }
   scrollIntoView() {}
 }
 
-function setup({ observer, search = "", sessionStorage, va } = {}) {
+function setup({ observer, search = "", sessionStorage, va, gtag, stamp, reduceMotion = false, readyState = "loading" } = {}) {
   const names = ["seitai", "nail", "hair"];
-  const tabs = names.map((name, i) => new FakeElement({ role: "tab", "aria-controls": `case-${name}`, "aria-selected": String(i === 0) }));
+  const labels = { seitai: "整体・マッサージ", nail: "ネイルサロン", hair: "美容室" };
+  const tabs = names.map((name, i) => new FakeElement({ role: "tab", "aria-controls": `case-${name}`, "aria-selected": String(i === 0), text: labels[name] }));
   const panels = Object.fromEntries(names.map((name, i) => {
     const panel = new FakeElement({ id: `case-${name}` });
     panel.hidden = i !== 0;
@@ -135,20 +146,32 @@ function setup({ observer, search = "", sessionStorage, va } = {}) {
   tabList.children = tabs;
   const reveals = [new FakeElement(), new FakeElement()];
   const lineLinks = ["hero", "sticky"].map((place) => new FakeElement({ "data-line-cta": place }));
+  const faqs = ["LINEと何が違うのですか？", "パソコンがなくても使えますか？"].map((question) => {
+    const item = new FakeElement();
+    item.selectors = { summary: new FakeElement({ text: `\n  ${question}  ` }) };
+    return item;
+  });
+  const sections = ["problem", "timing", "price"].map((id) => new FakeElement({ id }));
   const nodes = {
     "[data-header]": new FakeElement(),
     "[data-mobile-cta]": new FakeElement(),
     "[data-hero-cta]": new FakeElement(),
     "[data-final-cta]": new FakeElement(),
     "[data-case-tabs]": tabList,
+    "[data-animated-src]": stamp || null,
   };
+  const windowListeners = {};
   const observers = [];
   const window = {
     scrollY: 0,
-    addEventListener() {},
+    addEventListener(type, handler) {
+      (windowListeners[type] ||= []).push(handler);
+    },
+    matchMedia: (query) => ({ matches: reduceMotion && query.includes("reduce") }),
     location: { search },
     sessionStorage,
     va,
+    gtag,
   };
   if (observer) {
     window.IntersectionObserver = class {
@@ -168,11 +191,18 @@ function setup({ observer, search = "", sessionStorage, va } = {}) {
   }
   const document = {
     querySelector: (selector) => nodes[selector] || null,
-    querySelectorAll: (selector) => ({ ".reveal": reveals, "[data-line-cta]": lineLinks })[selector] || [],
+    querySelectorAll: (selector) =>
+      ({ ".reveal": reveals, "[data-line-cta]": lineLinks, ".faq-list details": faqs, "main > section[id]": sections })[selector] || [],
     getElementById: (id) => panels[id] || null,
+    readyState,
   };
   vm.runInNewContext(script, { window, document, IntersectionObserver: window.IntersectionObserver, URLSearchParams });
-  return { tabs, panels, nodes, reveals, observers, lineLinks };
+  return { tabs, panels, nodes, reveals, observers, lineLinks, faqs, sections, windowListeners };
+}
+
+function gaRecorder() {
+  const events = [];
+  return { events, gtag: (...args) => events.push(JSON.parse(JSON.stringify(args))) };
 }
 
 function recorder() {
@@ -272,4 +302,109 @@ test("固定のLINEボタンはヒーローと最後のCTAが見えない間だ�
   assert.equal(cta.classes.has("is-visible"), true);
   ctaObserver.emit([[nodes["[data-hero-cta]"], true]]);
   assert.equal(cta.classes.has("is-visible"), false);
+});
+
+test("GA4：LINEボタンのクリックを line_click（押した場所つき）で送る", () => {
+  const ga = gaRecorder();
+  const { lineLinks } = setup({ gtag: ga.gtag });
+  lineLinks[0].fire("click");
+  lineLinks[1].fire("click");
+  assert.deepEqual(ga.events, [
+    ["event", "line_click", { cta_position: "hero" }],
+    ["event", "line_click", { cta_position: "sticky" }],
+  ]);
+});
+
+test("GA4：業種タブの切り替えとFAQを開いたときに、どれかを送る", () => {
+  const ga = gaRecorder();
+  const { tabs, faqs } = setup({ gtag: ga.gtag });
+  tabs[1].fire("click");
+  faqs[0].open = true;
+  faqs[0].fire("toggle");
+  faqs[0].open = false;
+  faqs[0].fire("toggle");
+  assert.deepEqual(ga.events, [
+    ["event", "case_tab_select", { case_industry: "ネイルサロン" }],
+    ["event", "faq_open", { faq_question: "LINEと何が違うのですか？" }],
+  ]);
+});
+
+test("GA4：主な章が画面に入ったら section_view を章ごとに1回だけ送る", () => {
+  const ga = gaRecorder();
+  const { observers, sections } = setup({ gtag: ga.gtag, observer: true });
+  const sectionObserver = observers.find((o) => o.targets.includes(sections[0]));
+  assert.ok(sectionObserver);
+  sectionObserver.emit([[sections[0], true], [sections[1], false]]);
+  assert.deepEqual(ga.events, [["event", "section_view", { section_id: "problem" }]]);
+});
+
+test("GA4：gtag がない環境（解析が読み込まれない）でも動く", () => {
+  const { lineLinks, tabs, faqs } = setup();
+  assert.doesNotThrow(() => {
+    lineLinks[0].fire("click");
+    tabs[1].fire("click");
+    faqs[0].open = true;
+    faqs[0].fire("toggle");
+  });
+});
+
+test("GA4のタグは本番のドメインだけで読み込み、LPとブログで同じ測定IDを使う", () => {
+  const { renderMessagePage } = require("../api/_lib/blog/pages");
+  const blog = renderMessagePage({ title: "テスト", message: "テスト" });
+  for (const [name, page] of [["LP", html], ["ブログ", blog]]) {
+    assert.match(page, /gtag\/js\?id=G-C5X5KD0WKV/, name);
+    assert.match(page, /gtag\("config", "G-C5X5KD0WKV"\)/, name);
+    assert.match(page, /location\.hostname === "hokokukakumei\.com"/, name);
+    // gtag は script.js より先に定義する（クリックの計測が gtag を呼ぶため）
+    assert.ok(page.indexOf("function gtag()") < page.indexOf("script.js"), name);
+  }
+});
+
+test("構造化データのFAQが、ページに見えている質問と答えに一致する", () => {
+  const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1];
+  const faqPage = JSON.parse(json)["@graph"].find((item) => item["@type"] === "FAQPage");
+  const strip = (text) => text.replace(/<[^>]+>/g, "").trim();
+  const visible = [...html.matchAll(/<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>/g)].map((m) => [strip(m[1]), strip(m[2])]);
+  assert.ok(visible.length >= 8);
+  assert.deepEqual(faqPage.mainEntity.map((q) => [q.name, q.acceptedAnswer.text]), visible);
+});
+
+test("SEO：タイトル・説明文・canonical・www の転送・llms.txt がそろっている", () => {
+  const title = html.match(/<title>([^<]+)<\/title>/)[1];
+  assert.match(title, /業務連絡/);
+  assert.match(title, /報告革命/);
+  const description = html.match(/<meta name="description" content="([^"]+)"/)[1];
+  assert.ok(description.length >= 70 && description.length <= 130, `説明文は ${description.length} 文字`);
+  assert.match(html, /<link rel="canonical" href="https:\/\/hokokukakumei\.com\/" \/>/);
+  const config = JSON.parse(fs.readFileSync(path.join(root, "vercel.json"), "utf8"));
+  const www = config.redirects.find((r) => r.has && r.has.some((h) => h.value === "www.hokokukakumei.com"));
+  assert.equal(www.destination, "https://hokokukakumei.com/:path*");
+  assert.equal(www.permanent, true);
+  const llms = fs.readFileSync(path.join(root, "llms.txt"), "utf8");
+  assert.match(llms, /^# 報告革命/);
+  assert.match(llms, /https:\/\/lin\.ee\/RuumZrp/);
+});
+
+test("ヒーローのスタンプは読み込み後に動く版へ差し替え、動きを減らす設定では静止画のまま", () => {
+  const still = "./assets/stamp-kanoe-sugoi-still.webp";
+  const animated = "./assets/stamp-kanoe-sugoi.webp";
+  const make = () => new FakeElement({ src: still, "data-animated-src": animated });
+
+  const normal = make();
+  const { windowListeners } = setup({ stamp: normal });
+  assert.equal(normal.getAttribute("src"), still, "読み込み前は静止画");
+  windowListeners.load.forEach((handler) => handler());
+  assert.equal(normal.getAttribute("src"), animated);
+
+  const reduced = make();
+  const result = setup({ stamp: reduced, reduceMotion: true });
+  assert.equal(result.windowListeners.load, undefined);
+  assert.equal(reduced.getAttribute("src"), still);
+
+  const late = make();
+  setup({ stamp: late, readyState: "complete" });
+  assert.equal(late.getAttribute("src"), animated, "読み込み後に実行されたらすぐ差し替える");
+
+  for (const file of [still, animated]) assert.ok(fs.existsSync(path.join(root, file)), file);
+  assert.match(html, /data-animated-src="\.\/assets\/stamp-kanoe-sugoi\.webp"/);
 });

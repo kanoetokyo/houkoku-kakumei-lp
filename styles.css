@@ -39,7 +39,10 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Noto Sans JP", system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  /* Webフォントは読み込まない（表示を止める119KBのCSSと文字の差し替えをなくすため）。
+     iPhone・Mac はヒラギノ、Android は Noto Sans CJK（Noto Sans JP と同じデザイン）、Windows は游ゴシック・メイリオ */
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", system-ui, -apple-system,
+    "Yu Gothic UI", "Yu Gothic", YuGothic, Meiryo, sans-serif;
   font-size: 16px;
   line-height: 1.85;
   letter-spacing: 0.02em;
@@ -494,7 +497,8 @@ b {
     gap: 48px;
   }
   .hero-title {
-    font-size: min(68px, 6vw);
+    /* 端末の文字（ヒラギノ）で「いつまでLINEで？」が約8.7字分になるので、2行に収まる大きさにする */
+    font-size: min(64px, 5.5vw);
   }
   .hero-lead {
     font-size: 18px;

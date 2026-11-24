@@ -472,13 +472,12 @@ test("ヒーローのスタンプは読み込み後に動く版へ差し替え�
   assert.match(html, /data-animated-src="\.\/assets\/stamp-kanoe-sugoi\.webp"/);
 });
 
-test("Webフォントは display=optional の通常の読み込み（非同期にすると2回目以降の訪問で表示後に差し替わってずれる）", () => {
+test("Webフォント（Google Fonts）は読み込まず、端末の文字を使う（表示を止めるCSSと文字の差し替えをなくす）", () => {
   const { renderMessagePage } = require("../api/_lib/blog/pages");
   const blog = renderMessagePage({ title: "テスト", message: "テスト" });
   for (const [name, page] of [["LP", html], ["ブログ", blog]]) {
-    const links = [...page.matchAll(/<link[^>]+fonts\.googleapis\.com\/css2[^>]*>/g)].map((m) => m[0]);
-    assert.equal(links.length, 1, name);
-    assert.match(links[0], /rel="stylesheet"/, name);
-    assert.match(links[0], /display=optional/, name);
+    assert.doesNotMatch(page, /fonts\.googleapis\.com|fonts\.gstatic\.com/, name);
   }
+  const css = fs.readFileSync(path.join(root, "styles.css"), "utf8");
+  assert.match(css, /font-family: "Hiragino Sans"/);
 });

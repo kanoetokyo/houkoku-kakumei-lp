@@ -208,3 +208,7 @@ LPのスタンプが、10月13日版の「AIカノエくん」（動きが硬い
 - www のトップ（`/`）が `/:path*` のルールで転送されていなかったので、`/` と `/:path+` のルールに分けた
 - `section_view` が、なめらかなスクロールで通り過ぎた章まで送っていたので、1秒以上表示された章だけにした
 - フォントのCSSを非同期（preload→stylesheet）にしたところ、フォントがキャッシュ済みの2回目以降の訪問で、表示後に @font-face が効いて文字が差し替わり、ヒーローのLINEボタンがずれた（PageSpeed で CLS 0.152 が再発）。通常の `<link rel="stylesheet">` に戻し、`display=optional` だけ残した。これで最初の表示までにフォントがあれば使い、なければ端末の文字のまま、途中で差し替わらない
+
+### Webフォントをやめて端末の文字に統一（2026年11月25日）
+
+`display=optional` の通常の読み込みに戻すと CLS は 0 になったが、Google Fonts の CSS（Noto Sans JP の4つの太さで119KB）が表示を止め、PageSpeed（モバイル）で FCP/LCP 3.5秒・パフォーマンス79。`optional` では初回の訪問者はほぼ端末の文字で見ているため、Webフォントの読み込み自体をやめ、文字の指定をヒラギノ（iPhone・Mac）→ Noto Sans JP / Noto Sans CJK JP（Android。Noto Sans JP と同じデザイン）→ 游ゴシック・メイリオ（Windows）の順にした。LP とブログの両方。900 の太さは端末にある一番太い字で表示される（iPhone のヒラギノは W6 相当）。

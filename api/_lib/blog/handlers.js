@@ -10,8 +10,8 @@ const HTML_CACHE = "public, max-age=0, s-maxage=300, stale-while-revalidate=8640
 const SHORT_CACHE = "public, max-age=0, s-maxage=60";
 const IMAGE_CACHE = "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800";
 
-// LP 側の URL（以前の静的 sitemap.xml と同じ）
-const STATIC_URLS = [{ loc: `${SITE_ORIGIN}/`, lastmod: "2026-10-31", changefreq: "weekly", priority: "1.0" }];
+// LP 側の URL。index.html の中身を変えたら lastmod も更新する（構造化データの dateModified と合わせる）
+const STATIC_URLS = [{ loc: `${SITE_ORIGIN}/`, lastmod: "2026-11-25", changefreq: "weekly", priority: "1.0" }];
 
 function send(res, status, body, headers = {}) {
   res.statusCode = status;

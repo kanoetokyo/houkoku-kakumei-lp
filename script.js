@@ -9,6 +9,12 @@
     if (typeof window.va === "function") window.va("event", { name, data });
   };
   const clip = (value) => String(value).slice(0, 100);
+  // Google アナリティクス（GA4）。gtag は head で定義している（本番のドメイン以外では送信しない）。
+  // パラメータ名は GA4 のカスタム定義（cta_position / faq_question / case_industry / section_id）と合わせる。
+  const gaEvent = (name, params) => {
+    if (typeof window.gtag === "function") window.gtag("event", name, params);
+  };
+  const textOf = (element) => clip(String((element && element.textContent) || "").replace(/\s+/g, " ").trim());
   // プライベートブラウズなどで sessionStorage が使えなくても、計測以外は動かす。
   const session = (use) => {
     try {
@@ -26,9 +32,49 @@
   }
   document.querySelectorAll("[data-line-cta]").forEach((link) => {
     link.addEventListener("click", () => {
-      track("LINE Click", { position: link.getAttribute("data-line-cta"), source: source || "(none)" });
+      const position = link.getAttribute("data-line-cta");
+      track("LINE Click", { position, source: source || "(none)" });
+      // GA4 ではキーイベント（成果）として数える。
+      gaEvent("line_click", { cta_position: position });
     });
   });
+
+  // よくある質問を開いたら、どの質問かを送る（閉じたときは送らない）。
+  document.querySelectorAll(".faq-list details").forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      gaEvent("faq_open", { faq_question: textOf(item.querySelector("summary")) });
+    });
+  });
+
+  // どの章まで読まれたか。LP の主な章が画面に入ったら、章ごとに1回だけ送る。
+  const sections = document.querySelectorAll("main > section[id]");
+  if (supportsObserver && sections.length) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          gaEvent("section_view", { section_id: entry.target.id });
+          sectionObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -40% 0px", threshold: 0 }
+    );
+    sections.forEach((section) => sectionObserver.observe(section));
+  }
+
+  // ヒーローのスタンプは最初は静止画。ページを読み込み終えてから動く版に差し替える
+  // （最初の表示を軽くするため）。動きを減らす設定の人には静止画のまま見せる。
+  const stamp = document.querySelector("[data-animated-src]");
+  if (stamp) {
+    const reduceMotion =
+      typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const animate = () => stamp.setAttribute("src", stamp.getAttribute("data-animated-src"));
+    if (!reduceMotion) {
+      if (document.readyState === "complete") animate();
+      else window.addEventListener("load", animate, { once: true });
+    }
+  }
 
   // 表示アニメーション。IntersectionObserver が使えない環境では最初から表示する。
   const revealTargets = document.querySelectorAll(".reveal");
@@ -94,6 +140,7 @@
       if (typeof tab.scrollIntoView === "function") {
         tab.scrollIntoView({ block: "nearest", inline: "nearest" });
       }
+      gaEvent("case_tab_select", { case_industry: textOf(tab) });
     };
     tabs.forEach((tab, index) => {
       tab.addEventListener("click", () => select(tab, false));

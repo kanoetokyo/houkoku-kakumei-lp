@@ -1,0 +1,28 @@
+# 報告革命
+
+> 報告革命（ほうこくかくめい）は、仕事のやりとりをグループLINEから卒業するための業務連絡・日報アプリです。株式会社カノエが提供しています。LINE以上、Slack・Chatwork未満の位置づけで、パソコンを持たないスタッフも自分のスマホ（iPhone・Android）だけで使えます。
+
+- 想定する会社：スタッフが7名を超えた、100名以下（20〜30名ほど）の中小企業。スタッフはパソコンを持たず、仕事の連絡がグループLINEに集まっている会社
+- 導入のタイミング：ひとりで目を配れるのは7人くらいまでと言われ、スタッフが7名を超えるとグループLINEでは報告や連絡が回らなくなりがち
+- できること：写真つきの日報・報告（タイムライン）、確認した人が名前でわかる掲示板、期限と完了がわかるタスク依頼、DM、スタンプ・コメントでの返事、サンクスカード、ランキング
+- 料金：1アカウントあたり月額550円（税込）。初期費用・契約条件はLINEで案内
+- 問い合わせ：LINE公式アカウント https://lin.ee/RuumZrp
+- 導入実績：4社47アカウント、1社あたり5〜22名（ハウスクリーニング事業者、2026年9月時点）
+
+## ページ
+
+- [報告革命（トップページ）](https://hokokukakumei.com/): 特長、LINEとの違い、導入のタイミング、料金、よくある質問
+- [報告革命ブログ](https://hokokukakumei.com/blog): 日報・報連相・情報共有・グループLINEの使い方など、店舗・現場をもつ経営者向けの記事
+- [LINEの業務利用のリスク6つ](https://hokokukakumei.com/blog/line-gyomu-riyou)
+- [仕事のLINEグループのルール7つ](https://hokokukakumei.com/blog/line-group-shigoto-rule)
+- [会社の10人の壁とは？](https://hokokukakumei.com/blog/kaisha-10nin-no-kabe)
+
+## アプリ
+
+- [App Store（iPhone）](https://apps.apple.com/jp/app/%E5%A0%B1%E5%91%8A%E9%9D%A9%E5%91%BD/id6804531486)
+- [Google Play（Android）](https://play.google.com/store/apps/details?id=jp.co.kanoe.houkokukakumei)
+- 利用には、導入企業から発行されるアカウントが必要です
+
+## 運営
+
+- 株式会社カノエ（https://www.kanoebiz.com/）

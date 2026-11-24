@@ -3,14 +3,25 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/",
       "has": [
         {
           "type": "host",
           "value": "www.hokokukakumei.com"
         }
       ],
-      "destination": "https://hokokukakumei.com/:path*",
+      "destination": "https://hokokukakumei.com/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.hokokukakumei.com"
+        }
+      ],
+      "destination": "https://hokokukakumei.com/:path+",
       "permanent": true
     }
   ],

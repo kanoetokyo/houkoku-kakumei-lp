@@ -52,15 +52,29 @@
     });
   });
 
-  // どの章まで読まれたか。LP の主な章が画面に入ったら、章ごとに1回だけ送る。
+  // どの章まで読まれたか。LP の主な章が1秒以上画面に入っていたら、章ごとに1回だけ送る
+  // （ページ内リンクのなめらかなスクロールで通り過ぎただけの章は数えない）。
   const sections = document.querySelectorAll("main > section[id]");
   if (supportsObserver && sections.length) {
+    const SECTION_DWELL_MS = 1000;
+    const timers = new Map();
     const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          gaEvent("section_view", { section_id: entry.target.id });
-          sectionObserver.unobserve(entry.target);
+          const section = entry.target;
+          if (entry.isIntersecting) {
+            if (timers.has(section)) return;
+            timers.set(
+              section,
+              window.setTimeout(() => {
+                gaEvent("section_view", { section_id: section.id });
+                sectionObserver.unobserve(section);
+              }, SECTION_DWELL_MS)
+            );
+          } else if (timers.has(section)) {
+            window.clearTimeout(timers.get(section));
+            timers.delete(section);
+          }
         });
       },
       { rootMargin: "0px 0px -40% 0px", threshold: 0 }

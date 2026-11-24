@@ -161,6 +161,8 @@ function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, re
     "[data-animated-src]": stamp || null,
   };
   const windowListeners = {};
+  const timers = new Map();
+  let timerId = 0;
   const observers = [];
   const window = {
     scrollY: 0,
@@ -168,6 +170,12 @@ function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, re
       (windowListeners[type] ||= []).push(handler);
     },
     matchMedia: (query) => ({ matches: reduceMotion && query.includes("reduce") }),
+    setTimeout: (handler) => {
+      timerId += 1;
+      timers.set(timerId, handler);
+      return timerId;
+    },
+    clearTimeout: (id) => timers.delete(id),
     location: { search },
     sessionStorage,
     va,
@@ -198,7 +206,12 @@ function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, re
     readyState,
   };
   vm.runInNewContext(script, { window, document, IntersectionObserver: window.IntersectionObserver, URLSearchParams });
-  return { tabs, panels, nodes, reveals, observers, lineLinks, faqs, sections, windowListeners };
+  const runTimers = () => {
+    const pending = [...timers.values()];
+    timers.clear();
+    pending.forEach((handler) => handler());
+  };
+  return { tabs, panels, nodes, reveals, observers, lineLinks, faqs, sections, windowListeners, runTimers };
 }
 
 function gaRecorder() {
@@ -372,12 +385,16 @@ test("GA4：業種タブの切り替えとFAQを開いたときに、どれか�
   ]);
 });
 
-test("GA4：主な章が画面に入ったら section_view を章ごとに1回だけ送る", () => {
+test("GA4：主な章が1秒以上画面に入っていたら section_view を送り、通り過ぎただけの章は送らない", () => {
   const ga = gaRecorder();
-  const { observers, sections } = setup({ gtag: ga.gtag, observer: true });
+  const { observers, sections, runTimers } = setup({ gtag: ga.gtag, observer: true });
   const sectionObserver = observers.find((o) => o.targets.includes(sections[0]));
   assert.ok(sectionObserver);
-  sectionObserver.emit([[sections[0], true], [sections[1], false]]);
+  // problem は留まる。timing は入ってすぐ出る（スクロールで通過）。
+  sectionObserver.emit([[sections[0], true], [sections[1], true]]);
+  sectionObserver.emit([[sections[1], false]]);
+  assert.deepEqual(ga.events, [], "入った瞬間には送らない");
+  runTimers();
   assert.deepEqual(ga.events, [["event", "section_view", { section_id: "problem" }]]);
 });
 
@@ -420,9 +437,12 @@ test("SEO：タイトル・説明文・canonical・www の転送・llms.txt が�
   assert.ok(description.length >= 70 && description.length <= 130, `説明文は ${description.length} 文字`);
   assert.match(html, /<link rel="canonical" href="https:\/\/hokokukakumei\.com\/" \/>/);
   const config = JSON.parse(fs.readFileSync(path.join(root, "vercel.json"), "utf8"));
-  const www = config.redirects.find((r) => r.has && r.has.some((h) => h.value === "www.hokokukakumei.com"));
-  assert.equal(www.destination, "https://hokokukakumei.com/:path*");
-  assert.equal(www.permanent, true);
+  // www はトップ（/）とそれ以外の両方を本ドメインへ転送する（/:path* だけではトップが転送されなかった）
+  const www = config.redirects.filter((r) => r.has && r.has.some((h) => h.value === "www.hokokukakumei.com"));
+  assert.deepEqual(www.map((r) => [r.source, r.destination, r.permanent]), [
+    ["/", "https://hokokukakumei.com/", true],
+    ["/:path+", "https://hokokukakumei.com/:path+", true],
+  ]);
   const llms = fs.readFileSync(path.join(root, "llms.txt"), "utf8");
   assert.match(llms, /^# 報告革命/);
   assert.match(llms, /https:\/\/lin\.ee\/RuumZrp/);
@@ -450,4 +470,15 @@ test("ヒーローのスタンプは読み込み後に動く版へ差し替え�
 
   for (const file of [still, animated]) assert.ok(fs.existsSync(path.join(root, file)), file);
   assert.match(html, /data-animated-src="\.\/assets\/stamp-kanoe-sugoi\.webp"/);
+});
+
+test("Webフォントは display=optional の通常の読み込み（非同期にすると2回目以降の訪問で表示後に差し替わってずれる）", () => {
+  const { renderMessagePage } = require("../api/_lib/blog/pages");
+  const blog = renderMessagePage({ title: "テスト", message: "テスト" });
+  for (const [name, page] of [["LP", html], ["ブログ", blog]]) {
+    const links = [...page.matchAll(/<link[^>]+fonts\.googleapis\.com\/css2[^>]*>/g)].map((m) => m[0]);
+    assert.equal(links.length, 1, name);
+    assert.match(links[0], /rel="stylesheet"/, name);
+    assert.match(links[0], /display=optional/, name);
+  }
 });

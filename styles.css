@@ -2372,6 +2372,18 @@ b {
   font-size: 12px;
 }
 
+.footer-note {
+  grid-column: 1 / -1;
+  color: rgb(255 255 255 / 0.5);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.site-footer .footer-note a {
+  color: rgb(255 255 255 / 0.7);
+  text-decoration: underline;
+}
+
 @media (min-width: 960px) {
   .site-footer {
     padding-bottom: 48px;

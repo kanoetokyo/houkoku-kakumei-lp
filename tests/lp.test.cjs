@@ -133,7 +133,7 @@ class FakeElement {
   scrollIntoView() {}
 }
 
-function setup({ observer, search = "", sessionStorage, va, gtag, stamp, reduceMotion = false, readyState = "loading" } = {}) {
+function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, reduceMotion = false, readyState = "loading" } = {}) {
   const names = ["seitai", "nail", "hair"];
   const labels = { seitai: "整体・マッサージ", nail: "ネイルサロン", hair: "美容室" };
   const tabs = names.map((name, i) => new FakeElement({ role: "tab", "aria-controls": `case-${name}`, "aria-selected": String(i === 0), text: labels[name] }));
@@ -172,6 +172,7 @@ function setup({ observer, search = "", sessionStorage, va, gtag, stamp, reduceM
     sessionStorage,
     va,
     gtag,
+    fbq,
   };
   if (observer) {
     window.IntersectionObserver = class {
@@ -260,6 +261,48 @@ test("UTMなし・sessionStorageが使えない・解析スクリプトがない
   assert.deepEqual(plain.events, [["event", { name: "LINE Click", data: { position: "hero", source: "(none)" } }]]);
 
   assert.doesNotThrow(() => setup({ search: "?utm_source=note" }).lineLinks[0].fire("click"));
+});
+
+test("Metaピクセルは、LPとブログの両方で script.js より前に読み込み、本番のドメインだけで PageView を送る", () => {
+  const { renderMessagePage } = require("../api/_lib/blog/pages");
+  const blog = renderMessagePage({ title: "テスト", message: "テスト" });
+  for (const [name, page, pixel, own] of [["LP", html, "./meta-pixel.js", "./script.js"], ["ブログ", blog, "/meta-pixel.js", "/script.js"]]) {
+    const tag = page.indexOf(`<script src="${pixel}" defer></script>`);
+    const main = page.indexOf(`<script src="${own}" defer></script>`);
+    assert.ok(tag > 0 && main > tag, name);
+    assert.match(page, /Meta Platforms, Inc\. の計測タグ/, `${name} に外部送信の表記がない`);
+  }
+  const pixelScript = fs.readFileSync(path.join(root, "meta-pixel.js"), "utf8");
+  const run = (hostname) => {
+    const inserted = [];
+    const window = { location: { hostname } };
+    const document = {
+      createElement: () => ({}),
+      getElementsByTagName: () => [{ parentNode: { insertBefore: (el) => inserted.push(el) } }],
+    };
+    vm.runInNewContext(pixelScript, { window, document });
+    return { window, inserted };
+  };
+  const live = run("hokokukakumei.com");
+  const calls = live.window.fbq.queue.map((args) => [...args]);
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [["init", "2124222891542582"], ["track", "PageView"]]);
+  assert.equal(live.inserted[0].src, "https://connect.facebook.net/en_US/fbevents.js");
+  assert.equal(live.inserted[0].async, true);
+  // ローカル・プレビューでは読み込まない。
+  for (const host of ["localhost", "houkoku-kakumei-lp-git-main-kanoe.vercel.app"]) {
+    const other = run(host);
+    assert.equal(other.window.fbq, undefined, host);
+    assert.equal(other.inserted.length, 0, host);
+  }
+});
+
+test("LINEボタンを押すと、Metaピクセルに Lead（押した場所つき）を送る。ピクセルがなくても動く", () => {
+  const sent = [];
+  const fbq = (...args) => sent.push(JSON.parse(JSON.stringify(args)));
+  const { lineLinks } = setup({ fbq });
+  lineLinks[1].fire("click");
+  assert.deepEqual(sent, [["track", "Lead", { content_name: "LINE問い合わせ", content_category: "sticky" }]]);
+  assert.doesNotThrow(() => setup().lineLinks[0].fire("click"));
 });
 
 test("タブのクリックと矢印キーで表示する業種が切り替わる", () => {

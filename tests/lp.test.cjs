@@ -133,7 +133,7 @@ class FakeElement {
   scrollIntoView() {}
 }
 
-function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, reduceMotion = false, readyState = "loading" } = {}) {
+function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, video, reduceMotion = false, readyState = "loading" } = {}) {
   const names = ["seitai", "nail", "hair"];
   const labels = { seitai: "整体・マッサージ", nail: "ネイルサロン", hair: "美容室" };
   const tabs = names.map((name, i) => new FakeElement({ role: "tab", "aria-controls": `case-${name}`, "aria-selected": String(i === 0), text: labels[name] }));
@@ -201,8 +201,15 @@ function setup({ observer, search = "", sessionStorage, va, gtag, fbq, stamp, re
   const document = {
     querySelector: (selector) => nodes[selector] || null,
     querySelectorAll: (selector) =>
-      ({ ".reveal": reveals, "[data-line-cta]": lineLinks, ".faq-list details": faqs, "main > section[id]": sections })[selector] || [],
+      ({
+        ".reveal": reveals,
+        "[data-line-cta]": lineLinks,
+        ".faq-list details": faqs,
+        "main > section[id]": sections,
+        "[data-youtube]": video ? [video] : [],
+      })[selector] || [],
     getElementById: (id) => panels[id] || null,
+    createElement: (tag) => new FakeElement({ tag }),
     readyState,
   };
   vm.runInNewContext(script, { window, document, IntersectionObserver: window.IntersectionObserver, URLSearchParams });
@@ -480,4 +487,35 @@ test("Webフォント（Google Fonts）は読み込まず、端末の文字を�
   }
   const css = fs.readFileSync(path.join(root, "styles.css"), "utf8");
   assert.match(css, /font-family: "Hiragino Sans"/);
+});
+
+test("動画は押すまでYouTubeを読み込まず、押すと18:54（報告革命の場面）から再生してGA4に送る", () => {
+  const ga = gaRecorder();
+  const frame = new FakeElement({ "data-youtube": "Fr8tt8u1sz8", "data-start": "1134", "data-title": "テスト動画" });
+  const button = new FakeElement();
+  frame.selectors = { ".video-play": button };
+  frame.replaceChildren = (...nodes) => {
+    frame.children = nodes;
+  };
+  setup({ gtag: ga.gtag, video: frame });
+  assert.equal(frame.children.length, 0, "押す前は iframe がない");
+  button.fire("click");
+  const iframe = frame.children[0];
+  assert.equal(iframe.getAttribute("tag"), "iframe");
+  assert.equal(
+    iframe.getAttribute("src"),
+    "https://www.youtube-nocookie.com/embed/Fr8tt8u1sz8?start=1134&autoplay=1&rel=0&playsinline=1"
+  );
+  assert.equal(iframe.getAttribute("title"), "テスト動画");
+  assert.deepEqual(ga.events, [["event", "video_play", { video_id: "Fr8tt8u1sz8", video_start: 1134 }]]);
+});
+
+test("LPの動画：18:54から始まる設定と場面の表示、構造化データの場面（Clip）がそろっている", () => {
+  assert.match(html, /data-youtube="Fr8tt8u1sz8" data-start="1134"/);
+  assert.match(html, /18:54〜25:26/);
+  assert.match(html, /watch\?v=Fr8tt8u1sz8&amp;t=1134s/);
+  const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1];
+  const video = JSON.parse(json)["@graph"].find((item) => item["@type"] === "VideoObject");
+  assert.equal(video.embedUrl, "https://www.youtube.com/embed/Fr8tt8u1sz8");
+  assert.deepEqual(video.hasPart.map((c) => [c.name, c.startOffset, c.endOffset]), [["社内SNSアプリ「報告革命」", 1134, 1526]]);
 });

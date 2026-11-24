@@ -44,6 +44,31 @@
     });
   });
 
+  // 動画は、押されるまで YouTube を読み込まない（サムネイルだけ出しておき、ページを軽く保つ）。
+  // 押したら指定の秒数（data-start）から自動で再生する。
+  document.querySelectorAll("[data-youtube]").forEach((frame) => {
+    const button = frame.querySelector(".video-play");
+    if (!button) return;
+    button.addEventListener("click", () => {
+      const id = frame.getAttribute("data-youtube");
+      const start = Number(frame.getAttribute("data-start")) || 0;
+      const iframe = document.createElement("iframe");
+      iframe.setAttribute(
+        "src",
+        `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?start=${start}&autoplay=1&rel=0&playsinline=1`
+      );
+      iframe.setAttribute("title", frame.getAttribute("data-title") || "動画");
+      iframe.setAttribute(
+        "allow",
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      );
+      iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+      iframe.setAttribute("allowfullscreen", "");
+      frame.replaceChildren(iframe);
+      gaEvent("video_play", { video_id: id, video_start: start });
+    });
+  });
+
   // よくある質問を開いたら、どの質問かを送る（閉じたときは送らない）。
   document.querySelectorAll(".faq-list details").forEach((item) => {
     item.addEventListener("toggle", () => {

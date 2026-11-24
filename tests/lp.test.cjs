@@ -161,6 +161,8 @@ function setup({ observer, search = "", sessionStorage, va, gtag, stamp, reduceM
     "[data-animated-src]": stamp || null,
   };
   const windowListeners = {};
+  const timers = new Map();
+  let timerId = 0;
   const observers = [];
   const window = {
     scrollY: 0,
@@ -168,6 +170,12 @@ function setup({ observer, search = "", sessionStorage, va, gtag, stamp, reduceM
       (windowListeners[type] ||= []).push(handler);
     },
     matchMedia: (query) => ({ matches: reduceMotion && query.includes("reduce") }),
+    setTimeout: (handler) => {
+      timerId += 1;
+      timers.set(timerId, handler);
+      return timerId;
+    },
+    clearTimeout: (id) => timers.delete(id),
     location: { search },
     sessionStorage,
     va,
@@ -197,7 +205,12 @@ function setup({ observer, search = "", sessionStorage, va, gtag, stamp, reduceM
     readyState,
   };
   vm.runInNewContext(script, { window, document, IntersectionObserver: window.IntersectionObserver, URLSearchParams });
-  return { tabs, panels, nodes, reveals, observers, lineLinks, faqs, sections, windowListeners };
+  const runTimers = () => {
+    const pending = [...timers.values()];
+    timers.clear();
+    pending.forEach((handler) => handler());
+  };
+  return { tabs, panels, nodes, reveals, observers, lineLinks, faqs, sections, windowListeners, runTimers };
 }
 
 function gaRecorder() {
@@ -329,12 +342,16 @@ test("GA4：業種タブの切り替えとFAQを開いたときに、どれか�
   ]);
 });
 
-test("GA4：主な章が画面に入ったら section_view を章ごとに1回だけ送る", () => {
+test("GA4：主な章が1秒以上画面に入っていたら section_view を送り、通り過ぎただけの章は送らない", () => {
   const ga = gaRecorder();
-  const { observers, sections } = setup({ gtag: ga.gtag, observer: true });
+  const { observers, sections, runTimers } = setup({ gtag: ga.gtag, observer: true });
   const sectionObserver = observers.find((o) => o.targets.includes(sections[0]));
   assert.ok(sectionObserver);
-  sectionObserver.emit([[sections[0], true], [sections[1], false]]);
+  // problem は留まる。timing は入ってすぐ出る（スクロールで通過）。
+  sectionObserver.emit([[sections[0], true], [sections[1], true]]);
+  sectionObserver.emit([[sections[1], false]]);
+  assert.deepEqual(ga.events, [], "入った瞬間には送らない");
+  runTimers();
   assert.deepEqual(ga.events, [["event", "section_view", { section_id: "problem" }]]);
 });
 

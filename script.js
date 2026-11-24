@@ -8,6 +8,10 @@
   const track = (name, data) => {
     if (typeof window.va === "function") window.va("event", { name, data });
   };
+  // Meta広告の成果計測（meta-pixel.js が読み込まれているときだけ送る）。
+  const trackMeta = (name, data) => {
+    if (typeof window.fbq === "function") window.fbq("track", name, data);
+  };
   const clip = (value) => String(value).slice(0, 100);
   // Google アナリティクス（GA4）。gtag は head で定義している（本番のドメイン以外では送信しない）。
   // パラメータ名は GA4 のカスタム定義（cta_position / faq_question / case_industry / section_id）と合わせる。
@@ -36,6 +40,7 @@
       track("LINE Click", { position, source: source || "(none)" });
       // GA4 ではキーイベント（成果）として数える。
       gaEvent("line_click", { cta_position: position });
+      trackMeta("Lead", { content_name: "LINE問い合わせ", content_category: position });
     });
   });
 

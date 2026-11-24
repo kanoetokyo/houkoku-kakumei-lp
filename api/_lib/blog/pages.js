@@ -98,6 +98,9 @@ function footer() {
           <a href="${LINE_URL}" target="_blank" rel="noopener" data-line-cta="footer">お問い合わせ（LINE）</a>
         </nav>
         <p class="copyright">© KANOE Inc.</p>
+        <p class="footer-note">
+          このサイトは広告の効果を測るため、Meta Platforms, Inc. の計測タグ（Metaピクセル）を使い、見たページやボタンの操作の情報をMetaへ送っています。詳しくは<a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Metaのプライバシーポリシー</a>をご覧ください。
+        </p>
       </div>
     </footer>
     <div class="mobile-cta" data-mobile-cta>
@@ -166,6 +169,7 @@ function layout({ title, description, canonical, robots = "index, follow, max-im
     <link rel="stylesheet" href="/blog.css" />
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
     <script src="/_vercel/insights/script.js" defer></script>
+    <script src="/meta-pixel.js" defer></script>
     <script src="/script.js" defer></script>
   </head>
   <body class="blog-page">

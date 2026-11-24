@@ -2734,3 +2734,68 @@ b {
     grid-column: 1 / -1;
   }
 }
+
+/* ============================================================
+   補助文を減らしたあとの調整と、「できること」のスマホ表示（2026-11-25）
+   ============================================================ */
+.app-points li {
+  align-items: center;
+}
+
+.insight-text {
+  text-align: center;
+}
+
+.footer-note + .footer-note {
+  margin-top: 4px;
+}
+
+@media (max-width: 767px) {
+  /* できること：スマホでは文章と小さな画面を横に並べ、1つの機能を1画面の半分ほどに収める */
+  .how .feature {
+    grid-template-columns: 1fr 112px;
+    gap: 16px;
+    align-items: center;
+    padding: 24px 0;
+  }
+  .how .feature-reverse .feature-text {
+    order: 0;
+  }
+  .how .feature-visual {
+    padding: 0;
+  }
+  .how .feature-visual::before {
+    width: 180px;
+  }
+  .how .feature-visual .phone,
+  .how .feature-visual.phone-pair .phone:first-child {
+    --pw: 112px;
+  }
+  .how .phone-pair {
+    padding-right: 0;
+  }
+  .how .phone-pair .phone-back {
+    display: none;
+  }
+  .how .feature-step {
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .how .feature-step span {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  .how .feature h3 {
+    font-size: 19px;
+    line-height: 1.45;
+  }
+  .how .feature-text > p {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .how .phone-screen .status-bar {
+    display: none;
+  }
+}

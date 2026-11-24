@@ -377,9 +377,12 @@ test("SEO：タイトル・説明文・canonical・www の転送・llms.txt が�
   assert.ok(description.length >= 70 && description.length <= 130, `説明文は ${description.length} 文字`);
   assert.match(html, /<link rel="canonical" href="https:\/\/hokokukakumei\.com\/" \/>/);
   const config = JSON.parse(fs.readFileSync(path.join(root, "vercel.json"), "utf8"));
-  const www = config.redirects.find((r) => r.has && r.has.some((h) => h.value === "www.hokokukakumei.com"));
-  assert.equal(www.destination, "https://hokokukakumei.com/:path*");
-  assert.equal(www.permanent, true);
+  // www はトップ（/）とそれ以外の両方を本ドメインへ転送する（/:path* だけではトップが転送されなかった）
+  const www = config.redirects.filter((r) => r.has && r.has.some((h) => h.value === "www.hokokukakumei.com"));
+  assert.deepEqual(www.map((r) => [r.source, r.destination, r.permanent]), [
+    ["/", "https://hokokukakumei.com/", true],
+    ["/:path+", "https://hokokukakumei.com/:path+", true],
+  ]);
   const llms = fs.readFileSync(path.join(root, "llms.txt"), "utf8");
   assert.match(llms, /^# 報告革命/);
   assert.match(llms, /https:\/\/lin\.ee\/RuumZrp/);

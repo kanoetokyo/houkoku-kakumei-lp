@@ -1616,6 +1616,127 @@ b {
   }
 }
 
+/* 動画（導入企業の使い方）。クリックするまで YouTube は読み込まない */
+.video {
+  background: var(--surface);
+}
+
+.video-box {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.video-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  background: #111;
+  box-shadow: var(--shadow-soft);
+}
+
+.video-frame iframe,
+.video-play,
+.video-play img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-play {
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.video-play img {
+  object-fit: cover;
+}
+
+.video-play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 45%, rgb(0 0 0 / 0.55));
+}
+
+.video-play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 76px;
+  height: 54px;
+  border-radius: 16px;
+  background: rgb(230 33 23 / 0.92);
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.video-play-icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  border-width: 11px 0 11px 18px;
+  border-style: solid;
+  border-color: transparent transparent transparent #fff;
+  transform: translate(-50%, -50%);
+}
+
+.video-play:hover .video-play-icon,
+.video-play:focus-visible .video-play-icon {
+  background: #e62117;
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.video-badge {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.72);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.video-badge b {
+  color: #ffb08a;
+}
+
+.video-box figcaption {
+  display: grid;
+  gap: 4px;
+  margin-top: 16px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.video-chapters b {
+  color: var(--brand-text);
+}
+
+.video-box figcaption a {
+  justify-self: start;
+  color: var(--brand-text);
+  font-weight: 700;
+}
+
+.video-box figcaption small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 /* 効果 */
 .benefits {
   background: var(--surface);
